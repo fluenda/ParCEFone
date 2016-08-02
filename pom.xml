@@ -91,6 +91,11 @@
                                 <phase>verify</phase>
                             </execution>
                         </executions>
+                        <configuration>
+                            <excludes>
+                                <exclude>.travis.yml</exclude>
+                            </excludes>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
