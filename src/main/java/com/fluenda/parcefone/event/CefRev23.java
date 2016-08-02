@@ -35,10 +35,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 public class CefRev23 extends CommonEvent {
-    final private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy HH:mm:ss");
+
+    static final private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy HH:mm:ss");
+    static {
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
+
     final private Class<?> objClass = this.getClass();
     final private Field[] fields = objClass.getDeclaredFields();
     private ArrayList<String> populatedExtensions = new ArrayList<String>();

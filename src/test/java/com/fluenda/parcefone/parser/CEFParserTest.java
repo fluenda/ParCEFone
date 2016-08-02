@@ -52,7 +52,7 @@ public class CEFParserTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
         Assert.assertEquals(InetAddress.getByName("10.201.78.57"), result.getExtensions(true).get("dvc"));
-        Assert.assertEquals(new Date(1423445306000L), result.getExtensions(true).get("rt"));
+        Assert.assertEquals(new Date(1423484906000L), result.getExtensions(true).get("rt"));
         Assert.assertEquals(Long.valueOf("80494706"), result.getExtensions(true).get("cn2"));
         Assert.assertEquals(Integer.valueOf("54527"), result.getExtensions(true).get("spt"));
         Assert.assertEquals("udp", result.getExtensions(true).get("proto"));
