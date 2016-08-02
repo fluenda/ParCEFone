@@ -94,8 +94,8 @@ public class CEFParserTest {
         Assert.assertTrue(parser.parse(sample1).getExtensions(false).containsKey("act"));
         Assert.assertNull(parser.parse(sample1).getExtensions(false).get("act"));
     }
-    @Test
 
+    @Test
     public void invalidMessageValidationTest() throws Exception {
         String sample1 = "CEF:0|security|threatmanager|1.0|100|detected a \\\\ in packet|10|src=10.0.0.1 act=blockedblockedblockedblockedblockedblockedblockedblockedblockedbl a \\\\ dst=1.1.1.1";
 
@@ -108,4 +108,16 @@ public class CEFParserTest {
         event = parser.parse(sample2, true);
         Assert.assertNull(event);
     }
+
+    @Test
+    public void invalidMessageTypesTest() throws Exception {
+        String sample1 = "CEF:0|security|threatmanager|1.0|100|detected a \\\\ in packet|10|src=10.0.0.1 rt=Wrong Date Format dst=1.1.1.1";
+
+        CEFParser parser = new CEFParser();
+
+        CommonEvent event = parser.parse(sample1, true);
+        Assert.assertNull(event);
+
+    }
+
 }

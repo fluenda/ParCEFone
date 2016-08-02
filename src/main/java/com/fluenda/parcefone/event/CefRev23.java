@@ -519,21 +519,26 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 2048)
     private String sourceZoneURI;
 
+    /**
+     * @param headers A map containing the  keys and values of headers of CEF event
+     * @throws CEFHandlingException when it has issues writing the values of the headers
+     */
     public void setHeader(Map<String, Object> headers)  throws CEFHandlingException {
         for (String key : headers.keySet()) {
             try {
                 Field field = objClass.getDeclaredField(key);
                 Object value = headers.get(key);
                 field.set(this, value);
-            } catch (NoSuchFieldException e) {
-                // Ignore illegal key names;
-                continue;
-            } catch (IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new CEFHandlingException("ERROR writing values to headers", e);
             }
         }
     }
 
+    /**
+     * @return A map containing the keys and values of headers
+     * @throws CEFHandlingException when it has issues reading the headers of CEF event
+     */
     public Map<String, Object> getHeader() throws CEFHandlingException {
         final HashMap<String, Object> headers = new HashMap<String, Object>();
         List headersKeys = Arrays.asList(new String[] {"version", "deviceVendor", "deviceProduct", "deviceVersion", "deviceEventClassId", "name", "severity"});
@@ -551,6 +556,10 @@ public class CefRev23 extends CommonEvent {
     }
 
 
+    /**
+     * @param extensions A map containing the keys and values of extensions of CEF event
+     * @throws CEFHandlingException when it has issues populating the extensions
+     */
     public void setExtension(Map<String, String> extensions) throws CEFHandlingException {
         for (String key : extensions.keySet()) {
             try {
@@ -564,7 +573,7 @@ public class CefRev23 extends CommonEvent {
                         InetAddress i4a = InetAddress.getByName((String) value);
                         field.set(this, i4a);
                     } catch (UnknownHostException e) {
-                        throw new CEFHandlingException("ERROR setting CEF value to " + key, e);
+                        throw new CEFHandlingException("ERROR setting value to field " + key, e);
                     }
 
                 // Date (timestamps) - Note we force a particular date format (set as private dateFormat above
@@ -576,8 +585,8 @@ public class CefRev23 extends CommonEvent {
                         } else {
                             field.set(this, Long.valueOf(value));
                         }
-                    } catch (ParseException e) {
-                        throw new CEFHandlingException("ERROR setting CEF value to " + key, e);
+                    } catch (ParseException|NumberFormatException e) {
+                        throw new CEFHandlingException("ERROR setting value to field " + key, e);
                     }
 
                 // Mac Addresses
@@ -609,6 +618,11 @@ public class CefRev23 extends CommonEvent {
     }
 
 
+    /**
+     * @param populatedOnly Boolean defining if Map should include all fields supported by {@link com.fluenda.parcefone.event.CefRev23}
+     * @return A map containing the keys and values of CEF extensions
+     * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
+     */
     public Map<String, Object> getExtensions(boolean populatedOnly) throws CEFHandlingException {
 
         final HashMap<String, Object> extensions = new HashMap<String, Object>();

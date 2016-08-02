@@ -28,17 +28,26 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CEFParser {
+    final static Logger logger = LoggerFactory.getLogger(CEFParser.class);
 
-    public CEFParser() {
-    }
-
-    public CommonEvent parse(String cefString) throws Exception  {
+    /**
+     * @param cefString String containing the CEF message to be parsed
+     * @return CommonEvent
+     */
+    public CommonEvent parse(String cefString)  {
         return this.parse(cefString, false);
     }
 
-    public CommonEvent parse(String cefString, final boolean validate) throws CEFHandlingException {
+    /**
+     * @param cefString String containing the CEF message to be parsed
+     * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
+     * @return CommonEvent
+     */
+    public CommonEvent parse(String cefString, final boolean validate)  {
 
         CommonEvent cefEvent = new CefRev23();
 
@@ -105,7 +114,8 @@ public class CEFParser {
             cefEvent.setExtension(extensions);
 
         } catch (CEFHandlingException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
+            return null;
         }
 
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
