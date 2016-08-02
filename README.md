@@ -16,5 +16,5 @@
 
 -->
 
-# ParCEFone
+# ParCEFone [![Build Status](https://travis-ci.org/fluenda/ParCEFone.svg?branch=master)](https://travis-ci.org/fluenda/ParCEFone)
 JAVA Common Event Format log parser
