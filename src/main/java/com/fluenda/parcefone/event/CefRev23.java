@@ -18,6 +18,7 @@ package com.fluenda.parcefone.event;
 
 import com.martiansoftware.macnificent.MacAddress;
 
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -31,19 +32,25 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
+import java.util.regex.Matcher;
 
 
 public class CefRev23 extends CommonEvent {
 
-    static final private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy HH:mm:ss");
-    static {
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
+    // Note the conflict with javax.validation.constraints.Pattern...
+    final private java.util.regex.Pattern timeRegex =  java.util.regex.Pattern.compile(
+                    "(?<MONTH>\\w+)\\s(?<DAY>\\d{2})\\s(?:(?<YEAR>\\d{4})(?:\\s))?" +
+                    "(?<HOUR>[012][0-9]):(?<MINUTE>[0-5][0-9]):(?<SECOND>[0-5][0-9])" +
+                    "(?:\\.(?<MILLI>\\d{3}))?(?:\\s(?<TZ>\\w+))?");
+
+
+    static final private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS");
+    static final private SimpleDateFormat dateFormatWithTZ = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS zzz");
 
     final private Class<?> objClass = this.getClass();
     final private Field[] fields = objClass.getDeclaredFields();
@@ -579,11 +586,33 @@ public class CefRev23 extends CommonEvent {
                 // Date (timestamps) - Note we force a particular date format (set as private dateFormat above
                 } else if (field.getType().equals(Date.class)) {
                     try {
-                        // Use a ": "to match epoch vs. Dateformat, otherwise treat as long
-                        if (value.toString().contains(":")) {
-                            field.set(this, dateFormat.parse(value));
+                        // Use a ": "to match epoch vs. Dateformat
+                        if (!value.toString().contains(":")) {
+                            // This is epoch
+                            field.set(this, new Date(Long.valueOf(value)));
                         } else {
-                            field.set(this, Long.valueOf(value));
+                            // This is one of the remaining 8 possible values, regex it out...
+                            Matcher matcher = timeRegex.matcher(value);
+                            int number = matcher.groupCount();
+                            if (matcher.matches()) {
+                                String year = matcher.group("YEAR") == null ? String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : matcher.group("YEAR") ;
+                                String milli = matcher.group("MILLI") == null ? "000" : matcher.group("MILLI");
+
+                                String regexDate =
+                                        year + "-" +
+                                        matcher.group("MONTH") + "-" +
+                                        matcher.group("DAY") + " " +
+                                        matcher.group("HOUR") + ":" +
+                                        matcher.group("MINUTE") + ":" +
+                                        matcher.group("SECOND") + "." +
+                                        milli;
+                                if (matcher.group("TZ") == null ) {
+                                    field.set(this, dateFormat.parse(regexDate));
+                                } else {
+                                    regexDate = regexDate + " " + matcher.group("TZ");
+                                    field.set(this, dateFormatWithTZ.parse(regexDate));
+                                }
+                            }
                         }
                     } catch (ParseException|NumberFormatException e) {
                         throw new CEFHandlingException("ERROR setting value to field " + key, e);

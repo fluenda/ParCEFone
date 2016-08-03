@@ -24,7 +24,7 @@
 
     <groupId>com.fluenda</groupId>
     <artifactId>ParCEFone</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <url>https://github.com/fluenda/ParCEFone</url>
     <organization>
         <name>ParCEFone</name>
@@ -40,6 +40,17 @@
         <url>https://github.com/fluenda/ParCEFone.git</url>
         <tag>HEAD</tag>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>bintray-fluenda-FluendaPackages</id>
+            <name>fluenda-FluendaPackages</name>
+            <url>https://api.bintray.com/maven/fluenda/FluendaPackages/ParCEFone/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <repositories>
         <repository>
@@ -47,8 +58,6 @@
             <url>http://mvn.martiansoftware.com</url>
         </repository>
     </repositories>
-
-
 
     <dependencies>
         <dependency>
@@ -76,6 +85,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -123,19 +138,36 @@
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <fork>true</fork>
+                <optimize>true</optimize>
+                <showDeprecation>true</showDeprecation>
+                <showWarnings>true</showWarnings>
+                <source>1.7</source>
+                <target>1.7</target>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
             <version>2.15</version>
             <configuration>
                 <checkstyleRules>
                     <module name="Checker">
+
                         <property name="charset" value="UTF-8" />
                         <property name="severity" value="warning" />
+
+                        <!-- enables suppression -->
+                        <module name="SuppressionCommentFilter"/>
                         <!-- Checks for whitespace -->
                         <!-- See http://checkstyle.sf.net/config_whitespace.html -->
                         <module name="FileTabCharacter">
                             <property name="eachLine" value="true" />
                         </module>
                         <module name="TreeWalker">
+                            <module name="FileContentsHolder"/>
                             <module name="RegexpSinglelineJava">
                                 <property name="format" value="\s+$" />
                                 <property name="message" value="Line has trailing whitespace." />
@@ -201,18 +233,12 @@
                             </module>
                             <module name="SingleLineJavadoc" />
                         </module>
+                        <!-- Filter out Checkstyle warnings that have been suppressed with the @SuppressWarnings annotation -->
+
                     </module>
                 </checkstyleRules>
                 <violationSeverity>warning</violationSeverity>
                 <includeTestSourceDirectory>true</includeTestSourceDirectory>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
             </configuration>
         </plugin>
     </plugins>

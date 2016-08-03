@@ -27,34 +27,37 @@ public class CEFParserTest {
 
     @Test
     public void validMessageWithoutValidationTest() throws Exception {
-        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 12:28:26 dvc=10.201.78.57 cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=54527 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851983 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851983 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNSS";
-
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 00:27:43 UTC cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
         CEFParser parser = new CEFParser();
 
         // Test sample
         Assert.assertNotNull(parser.parse(sample1));
         Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.201.78.57"), parser.parse(sample1).getExtensions(true).get("dvc"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtensions(true).get("dvc"));
         Assert.assertNull(parser.parse(sample1).getExtensions(true).get("act"));
     }
 
     @Test
     public void validMessagesWithValidationPopulatedExtensionsTest() throws Exception {
-        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 12:28:26 dvc=10.201.78.57 cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=54527 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851983 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851983 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNSS";
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 00:27:43 UTC cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
         String sample2 = "CEF:0|Apache|apache||200|GET /index.html|Unknown|act=block";
         String sample3 = "CEF:0|security|threatmanager|1.0|100|detected a \\| in message|10|src=10.0.0.1 act=blocked a | dst=1.1.1.1";
         String sample4 = "CEF:0|security|threatmanager|1.0|100|detected a \\\\ in packet|10|src=10.0.0.1 act=blocked a \\\\ dst=1.1.1.1";
 
+
+        //CHECKSTYLE:OFF
+        String sample5 = "CEF:0|Imperva Inc.|SecureSphere|6.0|Protocol|Double URL Encoding|Low| eventId=1032 proto=TCP categorySignificance=/Suspicious categoryBehavior=/Communicate/Query categoryTechnique=/Traffic Anomaly categoryDeviceGroup=/IDS/Network catdt=Network-based IDS/IPS categoryOutcome=/Attempt categoryObject=/Host/Application/Service art=1396036427228 cat=Alert deviceSeverity=Low act=None rt=1396032820000 src=72.238.189.126 sourceZoneURI=/All Zones/ArcSight System/Public Address Space Zones/ARIN/63.0.0.0-76.255.255.255 (ARIN) spt=45694 dst=10.128.10.42 destinationZoneURI=/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255 dpt=8080 duser=n/a cs1=Web Protocol Policy cs2=Retail Server Group cs3=Multiple cs4=Multiple cs5=Distributed Double URL Encoding cs1Label=Policy cs2Label=ServerGroup cs3Label=ServiceName cs4Label=ApplicationName cs5Label=Description ahost=prdctapcuacol01.clientaux.local agt=10.135.129.120 agentZoneURI=/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255 av=6.0.5.6782.0 atz=America/New_York aid=3ztE6CkUBABD-FjNq0c5CAQ\\\\=\\\\= at=syslog dvchost=prdctrmimpmx01.associateaux.local dvc=10.135.16.29 deviceZoneURI=/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255 dtz=America/New_York _cefVer=0.1";
+        //CHECKSTYLE:ON
         CEFParser parser = new CEFParser();
 
-        // Test 1st sample
+//        // Test 1st sample
         CommonEvent result = parser.parse(sample1, true);
         Assert.assertNotNull(result);
         Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.201.78.57"), result.getExtensions(true).get("dvc"));
-        Assert.assertEquals(new Date(1423484906000L), result.getExtensions(true).get("rt"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), result.getExtensions(true).get("dvc"));
+        Assert.assertEquals(new Date(1423441663000L), result.getExtensions(true).get("rt"));
         Assert.assertEquals(Long.valueOf("80494706"), result.getExtensions(true).get("cn2"));
-        Assert.assertEquals(Integer.valueOf("54527"), result.getExtensions(true).get("spt"));
+        Assert.assertEquals(Integer.valueOf("61395"), result.getExtensions(true).get("spt"));
         Assert.assertEquals("udp", result.getExtensions(true).get("proto"));
         Assert.assertFalse(result.getExtensions(true).containsKey("act"));
 
@@ -79,18 +82,27 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("1.1.1.1"), result.getExtensions(true).get("dst"));
         Assert.assertEquals(InetAddress.getByName("10.0.0.1"), result.getExtensions(true).get("src"));
         Assert.assertEquals("blocked a \\\\", result.getExtensions(true).get("act"));
+
+        // Test 5th sample
+        result = parser.parse(sample5, true);
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
+        Assert.assertEquals(InetAddress.getByName("10.128.10.42"), result.getExtensions(true).get("dst"));
+        Assert.assertEquals(InetAddress.getByName("72.238.189.126"), result.getExtensions(true).get("src"));
+        Assert.assertEquals("/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255", result.getExtensions(true).get("deviceZoneURI"));
+        Assert.assertEquals(new Date(1396032820000L), result.getExtensions(true).get("rt"));
    }
+
 
     @Test
     public void validMessageValidationAllExtenstionsTest() throws Exception {
-        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 12:28:26 dvc=10.201.78.57 cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=54527 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851983 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851983 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNSS";
-
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 00:27:43 UTC cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
         CEFParser parser = new CEFParser();
 
         // Test 1st sample
         Assert.assertNotNull(parser.parse(sample1, true));
         Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.201.78.57"), parser.parse(sample1).getExtensions(true).get("dvc"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtensions(true).get("dvc"));
         Assert.assertTrue(parser.parse(sample1).getExtensions(false).containsKey("act"));
         Assert.assertNull(parser.parse(sample1).getExtensions(false).get("act"));
     }
