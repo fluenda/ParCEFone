@@ -17,6 +17,7 @@
 package com.fluenda.parcefone.parser;
 
 import com.fluenda.parcefone.event.CommonEvent;
+import com.fluenda.parcefone.formatter.prettyFormal;
 import com.martiansoftware.macnificent.MacAddress;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,6 +25,8 @@ import org.junit.Test;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CEFParserTest {
 
@@ -38,7 +41,7 @@ public class CEFParserTest {
                 "c6a3=2001:cdba::3257:9652 c6a3Label=Test IPv6 " +
                 // IPv4
                 "destinationTranslatedAddress=123.123.123.123 " +
-                // Date (as String)
+                // Date (without TZ)
                 "deviceCustomDate1=Feb 09 2015 00:27:43 " +
                 // Integer  and IP Address (from v4)
                 "dpt=1234 agt=123.123.124 dlat=40.366633";
@@ -52,7 +55,7 @@ public class CEFParserTest {
                 "c6a3=2001:cdba:0000:0000:0000:0000:3257:9652 c6a3Label=Test IPv6 " +
                 // IPv4
                 "destinationTranslatedAddress=123.123.123.123 " +
-                // Date (as String)
+                // Date ((without TZ)
                 "deviceCustomDate1=Feb 09 2015 00:27:43 " +
                 // Integer  and IP Address (from v6)
                 "dpt=1234 agt=2001:cdba:0:0:0:0:3257:9652 dlat=40.366633";
@@ -74,7 +77,7 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("2001:cdba:0000:0000:0000:0000:3257:9652"), result.getExtension(true).get("c6a3"));
         Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
         Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals("Feb 09 2015 00:27:43", result.getExtension(true).get("deviceCustomDate1"));
+        Assert.assertEquals(new Date(1423402063000L), result.getExtension(true).get("deviceCustomDate1"));
         Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
         Assert.assertEquals(InetAddress.getByName("123.123.0.124"), result.getExtension(true).get("agt"));
         Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));
@@ -92,7 +95,7 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("2001:cdba:0:0:0:0:3257:9652"), result.getExtension(true).get("c6a3"));
         Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
         Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals("Feb 09 2015 00:27:43", result.getExtension(true).get("deviceCustomDate1"));
+        Assert.assertEquals(new Date(1423402063000L), result.getExtension(true).get("deviceCustomDate1"));
         Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
         Assert.assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtension(true).get("agt"));
         Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));

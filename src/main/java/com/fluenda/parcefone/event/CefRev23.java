@@ -181,14 +181,12 @@ public class CefRev23 extends CommonEvent {
 
     private int destinationTranslatedPort;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String deviceCustomDate1;
+    private Date deviceCustomDate1;
 
     @Size(max = 1023)
     private String deviceCustomeDate1Label;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String deviceCustomDate2;
+    private Date deviceCustomDate2;
 
     @Size(max = 1023)
     private String deviceCustomeDate2Label;
@@ -269,8 +267,7 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 40)
     private String externalId;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String fileCreateTime;
+    private Date fileCreateTime;
 
     @Size(max = 255)
     private String fileHash;
@@ -278,8 +275,7 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 1023)
     private String field;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String fileModificationTime;
+    private Date fileModificationTime;
 
     @Size(max = 1023)
     private String filePath;
@@ -290,8 +286,7 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 1023)
     private String fileType;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String flexDate1;
+    private Date flexDate1;
 
     @Size(max = 128)
     private String flexDate1Label;
@@ -328,8 +323,7 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 1023)
     private String msg;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String oldFileCreateTime;
+    private Date oldFileCreateTime;
 
     @Size(max = 255)
     private String oldFileHash;
@@ -337,8 +331,7 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 1023)
     private String oldField;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String oldFileModificationTime;
+    private Date oldFileModificationTime;
 
     @Size(max = 1023)
     private String oldFileName;
@@ -456,8 +449,7 @@ public class CefRev23 extends CommonEvent {
 
     private MacAddress amac;
 
-    // TODO: Must be timestamp but document does not specify the format to be adopted, leaving as string.
-    private String art;
+    private Date art;
 
     @Size(max = 63)
     private String at;
@@ -577,8 +569,8 @@ public class CefRev23 extends CommonEvent {
                 // Inet, Inet4 and Inet6 address
                 if (field.getType().equals(InetAddress.class) || field.getType().equals(Inet4Address.class) || field.getType().equals(Inet6Address.class)) {
                     try {
-                        InetAddress i4a = InetAddress.getByName((String) value);
-                        field.set(this, i4a);
+                        InetAddress inetAddress = InetAddress.getByName((String) value);
+                        field.set(this, inetAddress);
                     } catch (UnknownHostException e) {
                         throw new CEFHandlingException("Error setting value to field " + key, e);
                     }
