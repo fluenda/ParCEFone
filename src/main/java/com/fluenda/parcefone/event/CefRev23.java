@@ -537,7 +537,7 @@ public class CefRev23 extends CommonEvent {
                 Object value = headers.get(key);
                 field.set(this, value);
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new CEFHandlingException("ERROR writing values to headers", e);
+                throw new CEFHandlingException("Error writing values to headers", e);
             }
         }
     }
@@ -555,7 +555,7 @@ public class CefRev23 extends CommonEvent {
                 try {
                     headers.put(f.getName(), f.get(this));
                 } catch (IllegalAccessException e) {
-                    throw new CEFHandlingException("ERROR harvesting headers, e");
+                    throw new CEFHandlingException("Error harvesting headers, e");
                 }
             }
         }
@@ -580,7 +580,7 @@ public class CefRev23 extends CommonEvent {
                         InetAddress i4a = InetAddress.getByName((String) value);
                         field.set(this, i4a);
                     } catch (UnknownHostException e) {
-                        throw new CEFHandlingException("ERROR setting value to field " + key, e);
+                        throw new CEFHandlingException("Error setting value to field " + key, e);
                     }
 
                 // Date (timestamps) - Note we force a particular date format (set as private dateFormat above
@@ -615,7 +615,7 @@ public class CefRev23 extends CommonEvent {
                             }
                         }
                     } catch (ParseException|NumberFormatException e) {
-                        throw new CEFHandlingException("ERROR setting value to field " + key, e);
+                        throw new CEFHandlingException("Error setting value to field " + key, e);
                     }
 
                 // Mac Addresses
@@ -649,7 +649,7 @@ public class CefRev23 extends CommonEvent {
                 // Ignore illegal key names;
                 continue;
             } catch (IllegalAccessException e) {
-                throw new CEFHandlingException("ERROR while setting CEF extension values", e);
+                throw new CEFHandlingException("Error while setting CEF extension values", e);
             }
         }
     }
@@ -678,7 +678,7 @@ public class CefRev23 extends CommonEvent {
                            extensions.put(f.getName(), value);
                        }
                     } catch (IllegalAccessException e) {
-                        throw new CEFHandlingException("ERROR while harvesting keys", e);
+                        throw new CEFHandlingException("Error while harvesting keys", e);
                     }
                 }
             }

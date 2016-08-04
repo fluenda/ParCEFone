@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.net.InetAddress;
+import java.nio.charset.Charset;
 import java.util.Date;
 
 public class CEFParserTest {
@@ -95,7 +96,6 @@ public class CEFParserTest {
         Assert.assertEquals(1234, result.getExtensions(true).get("dpt"));
         Assert.assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtensions(true).get("agt"));
         Assert.assertEquals(40.366633D, result.getExtensions(true).get("dlat"));
-
     }
 
     @Test
@@ -108,6 +108,34 @@ public class CEFParserTest {
         Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
         Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtensions(true).get("dvc"));
         Assert.assertNull(parser.parse(sample1).getExtensions(true).get("act"));
+    }
+
+    @Test
+    public void validByteArrayMessageWithoutValidationTest() throws Exception {
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 00:27:43 UTC cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
+        CEFParser parser = new CEFParser();
+
+        byte[] sample1Array = sample1.getBytes(Charset.forName("UTF-8"));
+
+        // Test sample
+        Assert.assertNotNull(parser.parse(sample1Array));
+        Assert.assertTrue(parser.parse(sample1Array).getHeader().containsKey("deviceVendor"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array).getExtensions(true).get("dvc"));
+        Assert.assertNull(parser.parse(sample1Array).getExtensions(true).get("act"));
+    }
+
+    @Test
+    public void validByteArrayMessageWithValidationTest() throws Exception {
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 00:27:43 UTC cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
+        CEFParser parser = new CEFParser();
+
+        byte[] sample1Array = sample1.getBytes(Charset.forName("UTF-8"));
+
+        // Test sample
+        Assert.assertNotNull(parser.parse(sample1Array, true));
+        Assert.assertTrue(parser.parse(sample1Array, true).getHeader().containsKey("deviceVendor"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array, true).getExtensions(true).get("dvc"));
+        Assert.assertNull(parser.parse(sample1Array, true).getExtensions(true).get("act"));
     }
 
     @Test

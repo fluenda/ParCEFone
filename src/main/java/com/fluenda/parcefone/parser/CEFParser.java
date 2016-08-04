@@ -24,6 +24,7 @@ import com.fluenda.parcefone.event.CommonEvent;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -34,6 +35,29 @@ import org.slf4j.LoggerFactory;
 public class CEFParser {
     final static Logger logger = LoggerFactory.getLogger(CEFParser.class);
 
+
+
+    /**
+     * @return CommonEvent
+     * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
+     */
+    public CommonEvent parse(byte [] cefByteArray)  {
+        String cefString;
+        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        return this.parse(cefString, false);
+    }
+
+    /**
+     * @return CommonEvent
+     * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
+     * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
+     */
+    public CommonEvent parse(byte [] cefByteArray, boolean validate)  {
+        String cefString;
+        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        return this.parse(cefString, validate);
+    }
+
     /**
      * @param cefString String containing the CEF message to be parsed
      * @return CommonEvent
@@ -41,6 +65,7 @@ public class CEFParser {
     public CommonEvent parse(String cefString)  {
         return this.parse(cefString, false);
     }
+
 
     /**
      * @param cefString String containing the CEF message to be parsed
@@ -122,6 +147,9 @@ public class CEFParser {
         Set<ConstraintViolation<CommonEvent>> validationResult = validator.validate(cefEvent);
 
         if (validate && (validationResult.size() > 0)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("CEF message failed validation");
+            }
                 return null;
         } else {
             return cefEvent;
