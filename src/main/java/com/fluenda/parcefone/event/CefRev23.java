@@ -593,7 +593,7 @@ public class CefRev23 extends CommonEvent {
                         } else {
                             // This is one of the remaining 8 possible values, regex it out...
                             Matcher matcher = timeRegex.matcher(value);
-                            int number = matcher.groupCount();
+
                             if (matcher.matches()) {
                                 String year = matcher.group("YEAR") == null ? String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : matcher.group("YEAR") ;
                                 String milli = matcher.group("MILLI") == null ? "000" : matcher.group("MILLI");
@@ -622,15 +622,23 @@ public class CefRev23 extends CommonEvent {
                 } else if (field.getType().equals(MacAddress.class)) {
                     field.set(this, new MacAddress(value));
 
-                // Longs
-                } else if (field.getType().equals(long.class)){
-                        field.set(this, Long.valueOf(value));
-
                 // Integers
-                } else if (field.getType().equals(int.class)){
+                } else if (field.getType().equals(int.class)) {
                     field.set(this, Integer.valueOf(value));
 
-                // The rest
+                // Longs
+                } else if (field.getType().equals(long.class)){
+                    field.set(this, Long.valueOf(value));
+
+                // Doubles
+                } else if (field.getType().equals(double.class)) {
+                    field.set(this, Double.valueOf(value));
+
+                // Floats
+                } else if (field.getType().equals(float.class)) {
+                    field.set(this, Float.valueOf(value));
+
+                // The rest (to be removed)
                 } else {
                     field.set(this, value );
                 }

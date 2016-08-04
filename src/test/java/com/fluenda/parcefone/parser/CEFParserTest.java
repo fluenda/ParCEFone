@@ -17,6 +17,7 @@
 package com.fluenda.parcefone.parser;
 
 import com.fluenda.parcefone.event.CommonEvent;
+import com.martiansoftware.macnificent.MacAddress;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,6 +25,78 @@ import java.net.InetAddress;
 import java.util.Date;
 
 public class CEFParserTest {
+
+    @Test
+    public void messageTypesTest() throws Exception {
+        String sample1 = "CEF:0|TestVendor|TestProduct|TestVersion|TestEventClassID|TestName|Low|" +
+                // TimeStamp, String and Long
+                "rt=Feb 09 2015 00:27:43 UTC cn3Label=Test Long cn3=9223372036854775807 " +
+                // FloatPoint and MacAddress
+                "cfp1=1.234 cfp1Label=Test FP Number smac=00:00:0c:07:ac:00 " +
+                // IPv6 and String
+                "c6a3=2001:cdba::3257:9652 c6a3Label=Test IPv6 " +
+                // IPv4
+                "destinationTranslatedAddress=123.123.123.123 " +
+                // Date (as String)
+                "deviceCustomDate1=Feb 09 2015 00:27:43 " +
+                // Integer  and IP Address (from v4)
+                "dpt=1234 agt=123.123.124 dlat=40.366633";
+
+        String sample2 = "CEF:0|TestVendor|TestProduct|TestVersion|TestEventClassID|TestName|Low|" +
+                // TimeStamp, String and Long
+                "rt=Feb 09 2015 00:27:43 UTC cn3Label=Test Long cn3=9223372036854775807 " +
+                // FloatPoint and MacAddress
+                "cfp1=1.234 cfp1Label=Test FP Number smac=00:00:0c:07:ac:00 " +
+                // IPv6 and String
+                "c6a3=2001:cdba:0000:0000:0000:0000:3257:9652 c6a3Label=Test IPv6 " +
+                // IPv4
+                "destinationTranslatedAddress=123.123.123.123 " +
+                // Date (as String)
+                "deviceCustomDate1=Feb 09 2015 00:27:43 " +
+                // Integer  and IP Address (from v6)
+                "dpt=1234 agt=2001:cdba:0:0:0:0:3257:9652 dlat=40.366633";
+
+        CEFParser parser = new CEFParser();
+
+        CommonEvent result;
+
+        // Test sample1
+        result = parser.parse(sample1, true);
+        Assert.assertNotNull(result);
+        Assert.assertEquals("TestVendor" , result.getHeader().get("deviceVendor"));
+        Assert.assertEquals(new Date(1423441663000L), result.getExtensions(true).get("rt"));
+        Assert.assertEquals("Test Long", result.getExtensions(true).get("cn3Label"));
+        Assert.assertEquals(9223372036854775807L, result.getExtensions(true).get("cn3"));
+        Assert.assertEquals(1.234F, result.getExtensions(true).get("cfp1"));
+        Assert.assertEquals("Test FP Number", result.getExtensions(true).get("cfp1Label"));
+        Assert.assertEquals(new MacAddress("00.00.0c.07.ac.00"), result.getExtensions(true).get("smac"));
+        Assert.assertEquals(InetAddress.getByName("2001:cdba:0000:0000:0000:0000:3257:9652"), result.getExtensions(true).get("c6a3"));
+        Assert.assertEquals("Test IPv6", result.getExtensions(true).get("c6a3Label"));
+        Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtensions(true).get("destinationTranslatedAddress"));
+        Assert.assertEquals("Feb 09 2015 00:27:43", result.getExtensions(true).get("deviceCustomDate1"));
+        Assert.assertEquals(1234, result.getExtensions(true).get("dpt"));
+        Assert.assertEquals(InetAddress.getByName("123.123.0.124"), result.getExtensions(true).get("agt"));
+        Assert.assertEquals(40.366633D, result.getExtensions(true).get("dlat"));
+
+        // Test sample2
+        result = parser.parse(sample2, true);
+        Assert.assertNotNull(result);
+        Assert.assertEquals("TestVendor" , result.getHeader().get("deviceVendor"));
+        Assert.assertEquals(new Date(1423441663000L), result.getExtensions(true).get("rt"));
+        Assert.assertEquals("Test Long", result.getExtensions(true).get("cn3Label"));
+        Assert.assertEquals(9223372036854775807L, result.getExtensions(true).get("cn3"));
+        Assert.assertEquals(1.234F, result.getExtensions(true).get("cfp1"));
+        Assert.assertEquals("Test FP Number", result.getExtensions(true).get("cfp1Label"));
+        Assert.assertEquals(new MacAddress("00.00.0c.07.ac.00"), result.getExtensions(true).get("smac"));
+        Assert.assertEquals(InetAddress.getByName("2001:cdba:0:0:0:0:3257:9652"), result.getExtensions(true).get("c6a3"));
+        Assert.assertEquals("Test IPv6", result.getExtensions(true).get("c6a3Label"));
+        Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtensions(true).get("destinationTranslatedAddress"));
+        Assert.assertEquals("Feb 09 2015 00:27:43", result.getExtensions(true).get("deviceCustomDate1"));
+        Assert.assertEquals(1234, result.getExtensions(true).get("dpt"));
+        Assert.assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtensions(true).get("agt"));
+        Assert.assertEquals(40.366633D, result.getExtensions(true).get("dlat"));
+
+    }
 
     @Test
     public void validMessageWithoutValidationTest() throws Exception {
