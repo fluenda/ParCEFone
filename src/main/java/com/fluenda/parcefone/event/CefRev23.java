@@ -660,7 +660,7 @@ public class CefRev23 extends CommonEvent {
      * @return A map containing the keys and values of CEF extensions
      * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
      */
-    public Map<String, Object> getExtensions(boolean populatedOnly) throws CEFHandlingException {
+    public Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException {
 
         final HashMap<String, Object> extensions = new HashMap<String, Object>();
         List headersKeys = Arrays.asList(new String[] {"version", "deviceVendor", "deviceProduct", "deviceVersion", "deviceEventClassId", "name", "severity"});

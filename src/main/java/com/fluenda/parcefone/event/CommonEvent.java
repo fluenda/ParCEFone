@@ -30,5 +30,5 @@ public abstract class CommonEvent {
 
     public abstract Map<String, Object> getHeader() throws CEFHandlingException;
 
-    public abstract Map<String, Object> getExtensions(boolean populatedOnly) throws CEFHandlingException;
+    public abstract Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException;
 }
