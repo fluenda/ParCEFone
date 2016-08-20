@@ -16,19 +16,15 @@
 
 -->
 
-# ParCEFone [![Build Status](https://travis-ci.org/fluenda/ParCEFone.svg?branch=master)](https://travis-ci.org/fluenda/ParCEFone)
-ParCEFone is a simple to use Common Event Format log parser for the JVM.
+# Improvements
+* Cover all 9 possible timestamp formats decribed in Appendix A
 
-It is written in JAVA and can be used by most JVM languages.
+# Major changes on 1.1
 
-## Using it
+* All date related fields are now Date objects
+* getExtensions has been renamed to getExtension
 
-If using Maven, add the following dependency:
+# Bug Fixes
+* Properly handle float and double fields
 
-```
-<dependency>
-    <groupId>com.fluenda</groupId>
-    <artifactId>ParCEFone</artifactId>
-    <version>1.1-SNAPSHOT</version>
-</dependency>
-```
+
