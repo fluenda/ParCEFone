@@ -74,10 +74,21 @@ public class CEFParser {
      */
     public CommonEvent parse(String cefString, final boolean validate)  {
 
+        int cefHeaderSize = 7;
         CommonEvent cefEvent = new CefRev23();
 
+        // Note how split number of splits is cefHeaderSize + 1. This is because the final split
+        // should be the body of the CEF message
         // Compiled pattern is equivalent to "(?<!\\\\)" + Pattern.quote("|")
-        final String[] extractedMessage = cefString.split("(?<!\\\\)" + Pattern.quote("|"), 8);
+        final String[] extractedMessage = cefString.split("(?<!\\\\)" + Pattern.quote("|"), cefHeaderSize + 1);
+
+        // CEF header misses values
+        if (extractedMessage.length < cefHeaderSize) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("CEF message failed validation");
+            }
+            return null;
+        }
 
         final HashMap<String, Object> headers = new HashMap<String, Object>();
         headers.put("version", Integer.valueOf(extractedMessage[0].substring(extractedMessage[0].length() - 1)));
