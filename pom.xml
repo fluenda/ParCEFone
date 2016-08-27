@@ -24,7 +24,7 @@
 
     <groupId>com.fluenda</groupId>
     <artifactId>ParCEFone</artifactId>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>ParCEFone</name>
@@ -67,16 +67,15 @@
             <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
         </snapshotRepository>
         <repository>
-            <id>jfrog-central</id>
-            <name>oss-jfrog-artifactory-releases</name>
-            <url>https://oss.jfrog.org/artifactory/oss-release-local</url>
+            <id>bintray-fluenda-maven</id>
+            <name>fluenda-maven</name>
+            <url>https://api.bintray.com/maven/fluenda/maven/ParCEFone/;publish=1</url>
         </repository>
     </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
 
 
     <dependencies>
@@ -158,6 +157,14 @@
                         <link>http://static.springsource.org/spring/docs/3.0.x/javadoc-api/</link>
                     </links>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -193,6 +200,18 @@
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <configLocation>checkstyle.xml</configLocation>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
