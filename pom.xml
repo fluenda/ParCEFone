@@ -24,11 +24,11 @@
 
     <groupId>com.fluenda</groupId>
     <artifactId>ParCEFone</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
     <name>ParCEFone</name>
-    <description>A lightway and easy to use CEF parser (with validation)</description>
+    <description>A lightweight and easy to use CEF parser (with validation)</description>
     <url>https://github.com/fluenda/ParCEFone</url>
     <inceptionYear>2016</inceptionYear>
     <organization>
