@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 
@@ -49,8 +50,8 @@ public class CefRev23 extends CommonEvent {
                     "(?:\\.(?<MILLI>\\d{3}))?(?:\\s(?<TZ>\\w+))?");
 
 
-    static final private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS");
-    static final private SimpleDateFormat dateFormatWithTZ = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS zzz");
+    static final private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS", Locale.ENGLISH);
+    static final private SimpleDateFormat dateFormatWithTZ = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS zzz", Locale.ENGLISH);
 
     final private Class<?> objClass = this.getClass();
     final private Field[] fields = objClass.getDeclaredFields();

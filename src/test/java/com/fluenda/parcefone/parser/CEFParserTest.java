@@ -25,6 +25,7 @@ import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class CEFParserTest {
@@ -76,7 +77,7 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("2001:cdba:0000:0000:0000:0000:3257:9652"), result.getExtension(true).get("c6a3"));
         Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
         Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
+        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.ENGLISH).parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
         Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
         Assert.assertEquals(InetAddress.getByName("123.123.0.124"), result.getExtension(true).get("agt"));
         Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));
@@ -94,7 +95,7 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("2001:cdba:0:0:0:0:3257:9652"), result.getExtension(true).get("c6a3"));
         Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
         Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
+        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.ENGLISH).parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
         Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
         Assert.assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtension(true).get("agt"));
         Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));
