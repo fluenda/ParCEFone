@@ -16,15 +16,32 @@
 
 -->
 
-# Improvements
+# 1.2.1-SNAPSHOT
+## Bug Fixes
+* ParCEFone Data parsing was locale dependent, instead all date formatting 
+  now uses Locale.ENGLISH. 
+
+# 1.2.0
+## Improvements
+* Dependency version bump and adoption of semantic versioning (no further 
+  beaking changes to be introduced in minor versions)
+
+# 1.1.1
+## Bug Fixes
+* Fixes IndexOutOfBoundsException when Parser is fed with totally bogus 
+  input
+
+# 1.1 
+## Improvements
 * Cover all 9 possible timestamp formats decribed in Appendix A
 
-# Major changes on 1.1
+## Major changes
+* All date related fields are now Date objects (breaking)
+* getExtensions has been renamed to getExtension (breaking)
 
-* All date related fields are now Date objects
-* getExtensions has been renamed to getExtension
-
-# Bug Fixes
+## Bug Fixes
 * Properly handle float and double fields
 
+# 1.0
 
+The wild west...
