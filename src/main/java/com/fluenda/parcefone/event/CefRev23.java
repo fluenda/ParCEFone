@@ -45,13 +45,9 @@ public class CefRev23 extends CommonEvent {
 
     // Note the conflict with javax.validation.constraints.Pattern...
     final private java.util.regex.Pattern timeRegex =  java.util.regex.Pattern.compile(
-                    "(?<MONTH>\\w+)\\s(?<DAY>\\d{2})\\s(?:(?<YEAR>\\d{4})(?:\\s))?" +
+                    "(?<MONTH>\\w+(\\.)?)\\s(?<DAY>\\d{2})\\s(?:(?<YEAR>\\d{4})(?:\\s))?" +
                     "(?<HOUR>[012][0-9]):(?<MINUTE>[0-5][0-9]):(?<SECOND>[0-5][0-9])" +
                     "(?:\\.(?<MILLI>\\d{3}))?(?:\\s(?<TZ>\\w+))?");
-
-
-    static final private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS", Locale.ENGLISH);
-    static final private SimpleDateFormat dateFormatWithTZ = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS zzz", Locale.ENGLISH);
 
     final private Class<?> objClass = this.getClass();
     final private Field[] fields = objClass.getDeclaredFields();
@@ -519,6 +515,21 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 2048)
     private String sourceZoneURI;
 
+    private Locale dateLocale;
+
+
+    public CefRev23(Locale locale) {
+        super();
+        this.dateLocale = locale;
+    }
+
+    public CefRev23() {
+        super();
+
+        // Defaults to ENGLISH locale when processing dates
+        this.dateLocale = Locale.ENGLISH;
+    }
+
     /**
      * @param headers A map containing the  keys and values of headers of CEF event
      * @throws CEFHandlingException when it has issues writing the values of the headers
@@ -600,10 +611,10 @@ public class CefRev23 extends CommonEvent {
                                         matcher.group("SECOND") + "." +
                                         milli;
                                 if (matcher.group("TZ") == null ) {
-                                    field.set(this, dateFormat.parse(regexDate));
+                                    field.set(this, dateFormat(false).parse(regexDate));
                                 } else {
                                     regexDate = regexDate + " " + matcher.group("TZ");
-                                    field.set(this, dateFormatWithTZ.parse(regexDate));
+                                    field.set(this, dateFormat(true).parse(regexDate));
                                 }
                             }
                         }
@@ -677,6 +688,16 @@ public class CefRev23 extends CommonEvent {
             }
         return extensions;
     }
+
+    private SimpleDateFormat dateFormat(boolean containsTZ) {
+
+        if (containsTZ) {
+            return new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS zzz", this.dateLocale);
+        } else {
+            return new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS", this.dateLocale);
+        }
+    }
+
 
 
 }

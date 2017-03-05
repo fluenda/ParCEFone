@@ -27,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class CEFParserTest {
 
     @Test
@@ -77,7 +76,7 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("2001:cdba:0000:0000:0000:0000:3257:9652"), result.getExtension(true).get("c6a3"));
         Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
         Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.ENGLISH).parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
+        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
         Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
         Assert.assertEquals(InetAddress.getByName("123.123.0.124"), result.getExtension(true).get("agt"));
         Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));
@@ -95,7 +94,7 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("2001:cdba:0:0:0:0:3257:9652"), result.getExtension(true).get("c6a3"));
         Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
         Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss", Locale.ENGLISH).parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
+        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
         Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
         Assert.assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtension(true).get("agt"));
         Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));
@@ -139,6 +138,47 @@ public class CEFParserTest {
         Assert.assertTrue(parser.parse(sample1Array, true).getHeader().containsKey("deviceVendor"));
         Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array, true).getExtension(true).get("dvc"));
         Assert.assertNull(parser.parse(sample1Array, true).getExtension(true).get("act"));
+    }
+
+    @Test
+    public void validByteArrayMessageWithLocaleAndValidationTest() throws Exception {
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=juil. 09 2015 00:27:43 UTC cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
+        CEFParser parser = new CEFParser();
+
+        byte[] sample1Array = sample1.getBytes(Charset.forName("UTF-8"));
+
+        // Test sample
+        Assert.assertNotNull(parser.parse(sample1Array, true, Locale.FRANCE));
+        Assert.assertTrue(parser.parse(sample1Array, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
+        Assert.assertEquals(new Date(1436401663000L), parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("rt"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("dvc"));
+        Assert.assertNull(parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("act"));
+    }
+
+    @Test
+    public void validStringMessageWithLocaleAndValidationTest() throws Exception {
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=1436401663000 cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
+        CEFParser parser = new CEFParser();
+
+        // Test sample
+        Assert.assertNotNull(parser.parse(sample1, true, Locale.FRANCE));
+        Assert.assertTrue(parser.parse(sample1, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
+        Assert.assertEquals(new Date(1436401663000L), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("rt"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("dvc"));
+        Assert.assertNull(parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("act"));
+    }
+
+    @Test
+    public void validStringMessageWithoutTZWithLocaleAndValidationTest() throws Exception {
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=juil. 09 2015 00:27:43 cn3Label=cncPort cn3=53 cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc=10.100.25.16 smac=00:00:0c:07:ac:00 cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
+        CEFParser parser = new CEFParser();
+
+        // Test sample
+        Assert.assertNotNull(parser.parse(sample1, true, Locale.FRANCE));
+        Assert.assertTrue(parser.parse(sample1, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
+        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Jul 09 2015 00:27:43"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("rt"));
+        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("dvc"));
+        Assert.assertNull(parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("act"));
     }
 
     @Test
@@ -256,8 +296,5 @@ public class CEFParserTest {
 
         CommonEvent event = parser.parse(sample1, true);
         Assert.assertNull(event);
-
-
     }
-
 }

@@ -26,6 +26,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,6 +60,19 @@ public class CEFParser {
     }
 
     /**
+     * @return CommonEvent
+     * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
+     * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
+     * @param locale The locale to be used when parsing dates (so that parser can handle both jul (en_US) and juil.(fr_FR)
+     */
+    public CommonEvent parse(byte [] cefByteArray, boolean validate, Locale locale)  {
+        String cefString;
+        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        return this.parse(cefString, validate, locale);
+    }
+
+
+    /**
      * @param cefString String containing the CEF message to be parsed
      * @return CommonEvent
      */
@@ -66,16 +80,25 @@ public class CEFParser {
         return this.parse(cefString, false);
     }
 
-
     /**
      * @param cefString String containing the CEF message to be parsed
      * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
      * @return CommonEvent
      */
     public CommonEvent parse(String cefString, final boolean validate)  {
+        return this.parse(cefString, validate, Locale.ENGLISH);
+    }
+
+    /**
+     * @param cefString String containing the CEF message to be parsed
+     * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
+     * @param locale The locale to be used when parsing dates (so that parser can handle both jul (en_US) and juil.(fr_FR)
+     * @return CommonEvent
+     */
+    public CommonEvent parse(String cefString, final boolean validate, Locale locale)  {
 
         int cefHeaderSize = 7;
-        CommonEvent cefEvent = new CefRev23();
+        CommonEvent cefEvent = new CefRev23(locale);
 
         // Note how split number of splits is cefHeaderSize + 1. This is because the final split
         // should be the body of the CEF message

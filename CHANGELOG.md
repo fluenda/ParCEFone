@@ -17,9 +17,11 @@
 -->
 
 # 1.2.1-SNAPSHOT
+## Improvements
+* Allow developers to control the locale used when parsing Date 
+  extensions (defaulting to Locale.ENGLISH for backward compatibility)
 ## Bug Fixes
-* ParCEFone Data parsing was locale dependent, instead all date formatting 
-  now uses Locale.ENGLISH. 
+* ParCEFone Data parsing was locale dependent
 
 # 1.2.0
 ## Improvements
