@@ -537,6 +537,10 @@ public class CefRev23 extends CommonEvent {
         this.dateLocale = Locale.ENGLISH;
     }
 
+    /**
+    * @param headers A map containing the  keys and values of headers of CEF event
+    * @throws CEFHandlingException when it has issues writing the values of the headers
+    */
     public void setHeader(Map<String, Object> headers)  throws CEFHandlingException {
         for (String key : headers.keySet()) {
             try {
