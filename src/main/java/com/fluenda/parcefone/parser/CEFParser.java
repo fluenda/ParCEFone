@@ -25,6 +25,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
@@ -33,10 +34,12 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A Common Event Format (CEF) parser used to convert String or byte array into a Map containing the <b>parsed and
+ * validated</b> CEF fields
+ */
 public class CEFParser {
     final static Logger logger = LoggerFactory.getLogger(CEFParser.class);
-
-
 
     /**
      * @return CommonEvent
@@ -73,6 +76,10 @@ public class CEFParser {
 
 
     /**
+     * <p>
+     * Converts a CEF formatted String into a {@link CommonEvent} object without enforcing strict validation.
+     * <p>
+     * The use of this method is discouraged and future versions may deprecate its use.
      * @param cefString String containing the CEF message to be parsed
      * @return CommonEvent
      */
@@ -81,6 +88,10 @@ public class CEFParser {
     }
 
     /**
+     * <p>
+     * Converts a CEF formatted String into a {@link CommonEvent} object with exposed control over strict validation.
+     * <p>
+     * All CEF extension fields containing Dates are processed with the {@link Locale Locale.ENGLISH}.
      * @param cefString String containing the CEF message to be parsed
      * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
      * @return CommonEvent
@@ -90,6 +101,8 @@ public class CEFParser {
     }
 
     /**
+     * Converts a CEF formatted String into a {@link CommonEvent} object with exposed control over validation and the
+     * {@link Locale} used to parse fields containing {@link Date Dates}
      * @param cefString String containing the CEF message to be parsed
      * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
      * @param locale The locale to be used when parsing dates (so that parser can handle both jul (en_US) and juil.(fr_FR)

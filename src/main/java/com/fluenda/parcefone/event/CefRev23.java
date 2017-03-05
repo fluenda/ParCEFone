@@ -40,7 +40,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-
+/**
+ * Implements the Common Event Format (CEF) as documented by
+ * <a href="https://www.protect724.hpe.com/servlet/JiveServlet/downloadBody/1072-102-9-20354/CommonEventFormatv23.pdf">
+ *     revision 23
+ * </a>
+ * (Retrieved on August 2016).
+ *
+ */
 public class CefRev23 extends CommonEvent {
 
     // Note the conflict with javax.validation.constraints.Pattern...
@@ -530,10 +537,6 @@ public class CefRev23 extends CommonEvent {
         this.dateLocale = Locale.ENGLISH;
     }
 
-    /**
-     * @param headers A map containing the  keys and values of headers of CEF event
-     * @throws CEFHandlingException when it has issues writing the values of the headers
-     */
     public void setHeader(Map<String, Object> headers)  throws CEFHandlingException {
         for (String key : headers.keySet()) {
             try {

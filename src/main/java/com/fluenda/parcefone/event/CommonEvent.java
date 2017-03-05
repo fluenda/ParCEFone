@@ -18,17 +18,35 @@ package com.fluenda.parcefone.event;
 
 import java.util.Map;
 
+/**
+ *  Implements a <i>struct like</i> class that holds headers and extension fields defined in the Common Event Format
+ *  maintained by HP Enterprise and used by a number of cyber security solutions.
+ */
 public abstract class CommonEvent {
-    // Implements a " struct like"  class that implements the Common Event
-    // Format v23 as described here:
-    // https://www.protect724.hpe.com/servlet/JiveServlet/downloadBody/1072-102-9-20354/CommonEventFormatv23.pdf
 
-    // Define getters and seters
+    /**
+     * @param headers A map containing the  keys and values of headers of CEF event
+     * @throws CEFHandlingException when it has issues writing the values of the headers
+     *
+     */
     public abstract void setHeader(Map<String, Object> headers) throws CEFHandlingException;
 
+    /**
+     * @param extensions A map containing the keys and values of extensions of CEF event
+     * @throws CEFHandlingException when it has issues populating the extensions
+     */
     public abstract void setExtension(Map<String, String> extensions) throws CEFHandlingException;
 
+    /**
+     * @return A map containing the keys and values of headers
+     * @throws CEFHandlingException when it has issues reading the headers of CEF event
+     */
     public abstract Map<String, Object> getHeader() throws CEFHandlingException;
 
+    /**
+     * @param populatedOnly Boolean defining if Map should include all fields supported by the <b>supported</b> CEF standard
+     * @return A map containing the keys and values of CEF extensions
+     * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
+     */
     public abstract Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException;
 }
