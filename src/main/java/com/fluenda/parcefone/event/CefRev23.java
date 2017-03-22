@@ -52,7 +52,7 @@ public class CefRev23 extends CommonEvent {
 
     // Note the conflict with javax.validation.constraints.Pattern...
     final private java.util.regex.Pattern timeRegex =  java.util.regex.Pattern.compile(
-                    "(?<MONTH>\\w+(\\.)?)\\s(?<DAY>\\d{2})\\s(?:(?<YEAR>\\d{4})(?:\\s))?" +
+                    "(?<MONTH>\\S+(\\.)?)\\s(?<DAY>\\d{2})\\s(?:(?<YEAR>\\d{4})(?:\\s))?" +
                     "(?<HOUR>[012][0-9]):(?<MINUTE>[0-5][0-9]):(?<SECOND>[0-5][0-9])" +
                     "(?:\\.(?<MILLI>\\d{3}))?(?:\\s(?<TZ>\\w+))?");
 
