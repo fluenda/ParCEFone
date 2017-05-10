@@ -188,12 +188,12 @@ public class CefRev23 extends CommonEvent {
     private Date deviceCustomDate1;
 
     @Size(max = 1023)
-    private String deviceCustomeDate1Label;
+    private String deviceCustomDate1Label;
 
     private Date deviceCustomDate2;
 
     @Size(max = 1023)
-    private String deviceCustomeDate2Label;
+    private String deviceCustomDate2Label;
 
     // OMG! Device direction is binary!!!
     // 0 = inbound 1 is outbound
