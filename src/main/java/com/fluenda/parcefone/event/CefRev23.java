@@ -396,7 +396,7 @@ public class CefRev23 extends CommonEvent {
 
     private Inet4Address sourceTranslatedAddress;
 
-    private int sourceTrnaslatedPort;
+    private int sourceTranslatedPort;
 
     private int spid;
 
