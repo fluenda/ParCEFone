@@ -45,7 +45,7 @@ public class CEFParser {
 
 
     /**
-    *  Creates a CEFParser instance utilizing the HibernateValidator.
+    *  Creates a CEFParser instance utilizing the default Bean Validator.
      */
     public CEFParser() {
 
