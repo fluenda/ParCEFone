@@ -49,7 +49,7 @@ public class CEFParser {
      * @return CEFParser
      */
     public CEFParser() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();;
+
     }
 
     /**
@@ -212,6 +212,11 @@ public class CEFParser {
         }
 
         if (validate) {
+            if (validator == null) {
+                // Since the validator wasn't initiated previously, create a new one;
+                this.validator = Validation.buildDefaultValidatorFactory().getValidator();;
+            }
+
             Set<ConstraintViolation<CommonEvent>> validationResult = validator.validate(cefEvent);
 
             if (validationResult.size() > 0) {
