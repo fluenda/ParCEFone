@@ -46,7 +46,6 @@ public class CEFParser {
 
     /**
     *  Creates a CEFParser instance utilizing the HibernateValidator.
-     * @return CEFParser
      */
     public CEFParser() {
 
@@ -55,7 +54,6 @@ public class CEFParser {
     /**
      *  Creates a CEFParser instance utilizing thread-safe Beans Validator. The use of this constructor should result in significantly higher
      *  throughput when performing multiple instatiations of CEFParser.
-     * @return CEFParser
      * @param validator A JSR-303 complianceValidator such as Hibernate or Apache bVal
      */
     public CEFParser(Validator validator) {
