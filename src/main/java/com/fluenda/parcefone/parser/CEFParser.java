@@ -37,9 +37,28 @@ import org.slf4j.LoggerFactory;
 /**
  * A Common Event Format (CEF) parser used to convert String or byte array into a Map containing the <b>parsed and
  * validated</b> CEF fields
+ * The parser does not make any assertion in regards to thread safety. Proceed with care.
  */
 public class CEFParser {
     final static Logger logger = LoggerFactory.getLogger(CEFParser.class);
+    Validator validator;
+
+
+    /**
+    *  Creates a CEFParser instance utilizing the HibernateValidator.
+     */
+    public CEFParser() {
+
+    }
+
+    /**
+     *  Creates a CEFParser instance utilizing thread-safe Beans Validator. The use of this constructor should result in significantly higher
+     *  throughput when performing multiple instatiations of CEFParser.
+     * @param validator A JSR-303 complianceValidator such as Hibernate or Apache bVal
+     */
+    public CEFParser(Validator validator) {
+        this.validator = validator;
+    }
 
     /**
      * @return CommonEvent
@@ -190,14 +209,22 @@ public class CEFParser {
             return null;
         }
 
-        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<CommonEvent>> validationResult = validator.validate(cefEvent);
+        if (validate) {
+            if (validator == null) {
+                // Since the validator wasn't initiated previously, create a new one;
+                this.validator = Validation.buildDefaultValidatorFactory().getValidator();;
+            }
 
-        if (validate && (validationResult.size() > 0)) {
+            Set<ConstraintViolation<CommonEvent>> validationResult = validator.validate(cefEvent);
+
+            if (validationResult.size() > 0) {
             if (logger.isDebugEnabled()) {
                 logger.debug("CEF message failed validation");
             }
                 return null;
+            } else {
+                return cefEvent;
+            }
         } else {
             return cefEvent;
         }
