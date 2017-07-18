@@ -16,10 +16,24 @@
 
 -->
 
-# 1.2.1-SNAPSHOT
+# 1.2.5
+## Improvements
+* [PERFORMANCE] Allow the reuse of Bean Validator
+* Reduce dependencies 
+
+# 1.2.3 & 1.2.4
+## Bug Fixes
+* Fix typos on CEF extension keys
+
+# 1.2.2
+## Bug Fixes
+* Adjusts timeRegex match to match non-ASCII characters
+
+# 1.2.1
 ## Improvements
 * Allow developers to control the locale used when parsing Date 
   extensions (defaulting to Locale.ENGLISH for backward compatibility)
+* Improve documentation
 ## Bug Fixes
 * ParCEFone Data parsing was locale dependent
 
