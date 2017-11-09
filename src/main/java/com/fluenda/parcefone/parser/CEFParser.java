@@ -162,10 +162,11 @@ public class CEFParser {
         // Compiled pattern is equivalent to String extensionRegex = "(?<!\\\\)" + Pattern.quote("=");
         final Matcher matcher = Pattern.compile("(?<!\\\\)" + Pattern.quote("=")).matcher(ext);
         final Matcher valueMatcher = Pattern.compile("(?<!\\\\)" + Pattern.quote("=")).matcher(ext);
+
         int index = 0;
 
         while (matcher.find()) {
-            String key = ext.substring(index, matcher.end() - 1);
+            String key = ext.substring(index, matcher.end() - 1).replace(" ", "");
 
             // Capture the start of the value (first char after delimiter match);
             int valueStart = matcher.end();
