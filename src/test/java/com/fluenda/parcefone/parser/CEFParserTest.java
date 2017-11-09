@@ -196,7 +196,7 @@ public class CEFParserTest {
         //CHECKSTYLE:ON
         CEFParser parser = new CEFParser();
 
-//        // Test 1st sample
+        // Test 1st sample
         CommonEvent result = parser.parse(sample1, true);
         Assert.assertNotNull(result);
         Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
@@ -233,6 +233,8 @@ public class CEFParserTest {
         result = parser.parse(sample5, true);
         Assert.assertNotNull(result);
         Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
+        // Test leading space on first KV pair
+        Assert.assertEquals(1032L, result.getExtension(true).get("eventId"));
         Assert.assertEquals(InetAddress.getByName("10.128.10.42"), result.getExtension(true).get("dst"));
         Assert.assertEquals(InetAddress.getByName("72.238.189.126"), result.getExtension(true).get("src"));
         Assert.assertEquals("/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255", result.getExtension(true).get("deviceZoneURI"));
