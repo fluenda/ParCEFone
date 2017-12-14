@@ -29,7 +29,7 @@ If using Maven, add the following dependency:
 <dependency>
     <groupId>com.fluenda</groupId>
     <artifactId>ParCEFone</artifactId>
-    <version>1.2.6-SNAPSHOT</version>
+    <version>1.2.6</version>
 </dependency>
 ```
 
