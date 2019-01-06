@@ -41,6 +41,9 @@ import org.slf4j.LoggerFactory;
  */
 public class CEFParser {
     final static Logger logger = LoggerFactory.getLogger(CEFParser.class);
+
+    final static Pattern extensionPattern = Pattern.compile("(?<!\\\\)" + Pattern.quote("="));
+
     Validator validator;
 
 
@@ -160,8 +163,8 @@ public class CEFParser {
         final String ext = extractedMessage[7];
 
         // Compiled pattern is equivalent to String extensionRegex = "(?<!\\\\)" + Pattern.quote("=");
-        final Matcher matcher = Pattern.compile("(?<!\\\\)" + Pattern.quote("=")).matcher(ext);
-        final Matcher valueMatcher = Pattern.compile("(?<!\\\\)" + Pattern.quote("=")).matcher(ext);
+        final Matcher matcher = extensionPattern.matcher(ext);
+        final Matcher valueMatcher = extensionPattern.matcher(ext);
 
         int index = 0;
 
