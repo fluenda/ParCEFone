@@ -282,7 +282,7 @@ public class CEFParserTest {
 
     @Test
     public void testMissingHeaders() throws Exception {
-        String sample1 = "CEF:0||threatmanager|1.0|100|detected a \\\\ in packet|10|src=10.0.0.1 ";
+        String sample1 = "CEF:0||threatmanager|1.0|100|detected a \\\\ in packet|10|src=10.0.0.1";
 
         CEFParser parser = new CEFParser();
 
