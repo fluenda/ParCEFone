@@ -59,6 +59,7 @@ public class CefRev23 extends CommonEvent {
     final private Class<?> objClass = this.getClass();
     final private Field[] fields = objClass.getDeclaredFields();
     private ArrayList<String> populatedExtensions = new ArrayList<String>();
+    private Map<String, Object> customExtensions = new HashMap<>();
 
     // Implements a " struct like"  class that implements the Common Event
     // Format v23 as described here:
@@ -82,22 +83,22 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 31)
     private String app;
 
-    private Inet6Address c6a1;
+    private InetAddress c6a1;
 
     @Size(max = 1023)
     private String c6a1Label;
 
-    private Inet6Address c6a2;
+    private InetAddress c6a2;
 
     @Size(max = 1023)
     private String c6a2Label;
 
-    private Inet6Address c6a3;
+    private InetAddress c6a3;
 
     @Size(max = 1023)
     private String c6a3Label;
 
-    private Inet6Address c6a4;
+    private InetAddress c6a4;
 
     @Size(max = 1023)
     private String c6a4Label;
@@ -657,7 +658,7 @@ public class CefRev23 extends CommonEvent {
                 // Add the key to the populate keys listt
                 populatedExtensions.add(key);
             } catch (NoSuchFieldException e) {
-                // Ignore illegal key names;
+                customExtensions.put(key, extensions.get(key));
                 continue;
             } catch (IllegalAccessException e) {
                 throw new CEFHandlingException("Error while setting CEF extension values", e);
@@ -693,6 +694,7 @@ public class CefRev23 extends CommonEvent {
                     }
                 }
             }
+        extensions.putAll(customExtensions);
         return extensions;
     }
 

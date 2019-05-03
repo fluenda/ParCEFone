@@ -28,8 +28,23 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 public class CEFParserTest {
+
+    @Test
+    public void customExtensionsandMappedIPV4Test() throws Exception {
+        String arcsightSample1 = "CEF:0|McAfee|Endpoint Security|ENS 10.5.3.3264|18055: A suspicious call was detected and blocked|A suspicious call was detected and blocked|High|eventId=239038978360 externalId=18055 msg=A suspicious call was detected and blocked mrt=1536700149348 categoryCustomFormatField=_DB_NAME: modelConfidence=0 c6a3=0:0:0:0:0:ffff:a8e:6cc3";
+        CEFParser parser = new CEFParser();
+
+        CommonEvent result;
+        result = parser.parse(arcsightSample1, true);
+        Map<String, Object> resultMap = result.getExtension(true);
+        int modelConfidence = Integer.valueOf((String) resultMap.get("modelConfidence"));
+        Assert.assertEquals("Custom Extension modelConfidence 0", 0, modelConfidence);
+        InetAddress inetAddress = (InetAddress) resultMap.get("c6a3");
+        Assert.assertEquals("Mapped IPV4 in IPV6 field: 10.142.108.195", "/10.142.108.195", inetAddress.toString());
+    }
 
     @Test
     public void messageTypesTest() throws Exception {
