@@ -90,15 +90,15 @@
             <version>3.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.martiansoftware</groupId>
-            <artifactId>macnificent</artifactId>
-            <version>0.2.0</version>
-            <scope>compile</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.21</version>
+            <version>1.7.30</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -109,18 +109,16 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.3.6.Final</version>
+            <version>5.4.3.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.1-b12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <!-- used to get macnificent -->
-        <repository>
-            <id>martiansoftware</id>
-            <url>http://mvn.martiansoftware.com</url>
-        </repository>
-    </repositories>
 
     <build>
         <resources>
@@ -188,6 +186,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <fork>true</fork>
                     <optimize>true</optimize>
@@ -229,7 +228,7 @@
                     <plugin>
                         <groupId>org.apache.rat</groupId>
                         <artifactId>apache-rat-plugin</artifactId>
-                        <version>0.12</version>
+                        <version>0.13</version>
                         <executions>
                             <execution>
                                 <goals>
