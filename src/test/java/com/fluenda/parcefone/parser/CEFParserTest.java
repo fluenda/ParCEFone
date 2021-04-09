@@ -17,7 +17,7 @@
 package com.fluenda.parcefone.parser;
 
 import com.fluenda.parcefone.event.CommonEvent;
-import com.martiansoftware.macnificent.MacAddress;
+import com.fluenda.parcefone.event.MacAddress;
 import org.junit.Assert;
 import org.junit.Test;
 

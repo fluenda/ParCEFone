@@ -16,9 +16,6 @@
  */
 package com.fluenda.parcefone.event;
 
-import com.martiansoftware.macnificent.MacAddress;
-
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
