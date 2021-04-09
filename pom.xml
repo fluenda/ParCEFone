@@ -24,7 +24,7 @@
 
     <groupId>com.fluenda</groupId>
     <artifactId>ParCEFone</artifactId>
-    <version>1.2.7</version>
+    <version>1.2.8</version>
     <packaging>jar</packaging>
 
     <name>ParCEFone</name>
