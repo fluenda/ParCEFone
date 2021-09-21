@@ -28,6 +28,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 public class CEFParserTest {
 
@@ -317,5 +318,23 @@ public class CEFParserTest {
         Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
         Assert.assertTrue(parser.parse(sample1).getExtension(false).containsKey("act"));
         Assert.assertNull(parser.parse(sample1).getExtension(false).get("act"));
+    }
+
+    @Test
+    public void testIncludeIllegalKeys() throws Exception {
+        String sample3 = "<159>Aug 09 08:56:28 8.8.8.8 CEF:0|x|Security|x.x.0|20|Transaction blocked|7| "
+			+ "act=blocked app=https dvc=8.8.8.8 dst=8.8.8.8 dhost=www.flynas.com dpt=443 src=8.8.8.8 "
+			+ "spt=53475 suser=x UserPath=LDAP://8.8.8.8 OU\\\\=1 - x x x x,OU\\\\=x x,DC\\\\=x,DC\\\\=com/x "
+			+ "destinationTranslatedPort=36436 rt=1628488588000 in=65412 out=546 requestMethod=GET  "
+			+ "category=20 http_response=200 http_proxy_status_code=302 duration=13 "
+			+ "requestClientApplication=Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0;) like Gecko reason=-  "
+			+ "cs1Label=Policy cs1=x x**x cs2Label=DynCat cs2=0 cs3Label=ContentType cs3=font/otf "
+			+ "cn1Label=DispositionCode cn1=1047 cn2Label=ScanDuration cn2=13 "
+			+ "request=https://www.flynas.com/css/fonts/GothamRounded-Book.otf URLRefer=https://www.flynas.com/en";
+
+        CEFParser parser = new CEFParser();
+        CommonEvent event = parser.parse(sample3, true);
+        Map<String, Object> extensions = event.getExtension(true, true);
+        Assert.assertTrue(extensions.get("http_response").equals("200"));
     }
 }
