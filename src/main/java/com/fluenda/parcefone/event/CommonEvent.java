@@ -49,4 +49,12 @@ public abstract class CommonEvent {
      * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
      */
     public abstract Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException;
+
+    /**
+     * @param populatedOnly Boolean defining if Map should include all fields supported by the <b>supported</b> CEF standard
+     * @param includeIllegalKeys Boolean defining if Map should include parsed keys that are not supported by the CEF standard
+     * @return A map containing the keys and values of CEF extensions
+     * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
+     */
+    public abstract Map<String, Object> getExtension(boolean populatedOnly, boolean includeIllegalKeys) throws CEFHandlingException;
 }
