@@ -71,9 +71,6 @@ public class CefRev23 extends CommonEvent {
     private String name;
     private String severity;
 
-    // support illegal keys
-    private Map<String, String> illegalKeys = new HashMap<String, String>();
-
     // The extension field and its list of KVs
 
     @Size(max = 63)
@@ -657,7 +654,7 @@ public class CefRev23 extends CommonEvent {
                 // Add the key to the populate keys listt
                 populatedExtensions.add(key);
             } catch (NoSuchFieldException e) {
-                this.illegalKeys.put(key, extensions.get(key));
+                // Ignore illegal key names;
                 continue;
             } catch (IllegalAccessException e) {
                 throw new CEFHandlingException("Error while setting CEF extension values", e);
@@ -668,11 +665,10 @@ public class CefRev23 extends CommonEvent {
 
     /**
      * @param populatedOnly Boolean defining if Map should include all fields supported by {@link com.fluenda.parcefone.event.CefRev23}
-     * @param includeIllegalKeys Boolean defining if Map should include parsed keys that are not supported by {@link com.fluenda.parcefone.event.CefRev23}
      * @return A map containing the keys and values of CEF extensions
      * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
      */
-    public Map<String, Object> getExtension(boolean populatedOnly, boolean includeIllegalKeys) throws CEFHandlingException {
+    public Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException {
 
         final HashMap<String, Object> extensions = new HashMap<String, Object>();
         List headersKeys = Arrays.asList(new String[] {"version", "deviceVendor", "deviceProduct", "deviceVersion", "deviceEventClassId", "name", "severity"});
@@ -694,21 +690,7 @@ public class CefRev23 extends CommonEvent {
                     }
                 }
             }
-
-        if(includeIllegalKeys) {
-            extensions.putAll(illegalKeys);
-        }
-
         return extensions;
-    }
-
-    /**
-     * @param populatedOnly Boolean defining if Map should include all fields supported by {@link com.fluenda.parcefone.event.CefRev23}
-     * @return A map containing the keys and values of CEF extensions
-     * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
-     */
-    public Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException {
-        return getExtension(populatedOnly, false);
     }
 
     private SimpleDateFormat dateFormat(boolean containsTZ) {
