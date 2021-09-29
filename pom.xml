@@ -239,7 +239,7 @@
                         </executions>
                         <configuration>
                             <excludes>
-                                <exclude>.travis.yml</exclude>
+                                <exclude>.github/workflows/maven.yml</exclude>
                                 <exclude>src/test/resources/log4j.properties</exclude>
                             </excludes>
                         </configuration>
