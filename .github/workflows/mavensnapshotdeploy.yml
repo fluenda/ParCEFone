@@ -4,9 +4,9 @@
 name: Deploy SNAPSHOT ParCEFone with Maven
 
 on:
-  push:
-    branches:
-      - next
+  pull_request:
+    types: [closed]
+    branches: [next]
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
         run: mvn --settings settings.xml --batch-mode --update-snapshots verify
 
       - name: Publish to GitHub Packages Apache Maven
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: github.event.pull_request.merged == true
         run: mvn --settings settings.xml deploy
         env:
           GITHUB_TOKEN: ${{ github.token }}
