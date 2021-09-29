@@ -34,6 +34,7 @@ public class CEFParserTest {
 
     @Test
     public void customExtensionsandMappedIPV4Test() throws Exception {
+        @SuppressWarnings("checkstyle:LineLength")
         String arcsightSample1 = "CEF:0|McAfee|Endpoint Security|ENS 10.5.3.3264|18055: A suspicious call was detected and blocked|A suspicious call was detected and blocked|High|eventId=239038978360 externalId=18055 msg=A suspicious call was detected and blocked mrt=1536700149348 categoryCustomFormatField=_DB_NAME: modelConfidence=0 c6a3=0:0:0:0:0:ffff:a8e:6cc3";
         CEFParser parser = new CEFParser();
 
@@ -205,10 +206,9 @@ public class CEFParserTest {
         String sample3 = "CEF:0|security|threatmanager|1.0|100|detected a \\| in message|10|src=10.0.0.1 act=blocked a | dst=1.1.1.1";
         String sample4 = "CEF:0|security|threatmanager|1.0|100|detected a \\\\ in packet|10|src=10.0.0.1 act=blocked a \\\\ dst=1.1.1.1";
 
-
-        //CHECKSTYLE:OFF
+        @SuppressWarnings("checkstyle:LineLength")
         String sample5 = "CEF:0|Imperva Inc.|SecureSphere|6.0|Protocol|Double URL Encoding|Low| eventId=1032 proto=TCP categorySignificance=/Suspicious categoryBehavior=/Communicate/Query categoryTechnique=/Traffic Anomaly categoryDeviceGroup=/IDS/Network catdt=Network-based IDS/IPS categoryOutcome=/Attempt categoryObject=/Host/Application/Service art=1396036427228 cat=Alert deviceSeverity=Low act=None rt=1396032820000 src=72.238.189.126 sourceZoneURI=/All Zones/ArcSight System/Public Address Space Zones/ARIN/63.0.0.0-76.255.255.255 (ARIN) spt=45694 dst=10.128.10.42 destinationZoneURI=/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255 dpt=8080 duser=n/a cs1=Web Protocol Policy cs2=Retail Server Group cs3=Multiple cs4=Multiple cs5=Distributed Double URL Encoding cs1Label=Policy cs2Label=ServerGroup cs3Label=ServiceName cs4Label=ApplicationName cs5Label=Description ahost=prdctapcuacol01.clientaux.local agt=10.135.129.120 agentZoneURI=/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255 av=6.0.5.6782.0 atz=America/New_York aid=3ztE6CkUBABD-FjNq0c5CAQ\\\\=\\\\= at=syslog dvchost=prdctrmimpmx01.associateaux.local dvc=10.135.16.29 deviceZoneURI=/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255 dtz=America/New_York _cefVer=0.1";
-        //CHECKSTYLE:ON
+
         CEFParser parser = new CEFParser();
 
         // Test 1st sample
