@@ -5,7 +5,7 @@ name: Verify and deploy ParCEFone with Maven
 
 on:
   release:
-    types: [published]
+    types: [released]
 
 jobs:
   build:
