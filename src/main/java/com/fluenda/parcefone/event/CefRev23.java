@@ -663,13 +663,22 @@ public class CefRev23 extends CommonEvent {
         }
     }
 
-
     /**
      * @param populatedOnly Boolean defining if Map should include all fields supported by {@link com.fluenda.parcefone.event.CefRev23}
      * @return A map containing the keys and values of CEF extensions
      * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
      */
     public Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException {
+        return getExtension(populatedOnly, false);
+    }
+
+    /**
+     * @param populatedOnly Boolean defining if Map should include all fields supported by {@link com.fluenda.parcefone.event.CefRev23}
+     * @param includeCustomExtensions Boolean defining if Map should include parsed keys that are not supported part of the base CEF Rev23 specification
+     * @return A map containing the keys and values of CEF extensions
+     * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
+     */
+    public Map<String, Object> getExtension(boolean populatedOnly, boolean includeCustomExtensions) throws CEFHandlingException {
 
         final HashMap<String, Object> extensions = new HashMap<String, Object>();
         List headersKeys = Arrays.asList(new String[] {"version", "deviceVendor", "deviceProduct", "deviceVersion", "deviceEventClassId", "name", "severity"});
@@ -691,7 +700,10 @@ public class CefRev23 extends CommonEvent {
                     }
                 }
             }
-        extensions.putAll(customExtensions);
+        if (includeCustomExtensions) {
+            extensions.putAll(customExtensions);
+        }
+
         return extensions;
     }
 

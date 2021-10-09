@@ -49,4 +49,13 @@ public abstract class CommonEvent {
      * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
      */
     public abstract Map<String, Object> getExtension(boolean populatedOnly) throws CEFHandlingException;
+
+
+    /**
+     * @param populatedOnly Boolean defining if Map should include all fields supported by {@link com.fluenda.parcefone.event.CefRev23}
+     * @param includeCustomExtensions Boolean defining if Map should include parsed keys that are not supported part of the base CEF Rev23 specification
+     * @return A map containing the keys and values of CEF extensions
+     * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
+     */
+    public abstract Map<String, Object> getExtension(boolean populatedOnly, boolean includeCustomExtensions) throws CEFHandlingException;
 }

@@ -40,7 +40,7 @@ public class CEFParserTest {
 
         CommonEvent result;
         result = parser.parse(arcsightSample1, true);
-        Map<String, Object> resultMap = result.getExtension(true);
+        Map<String, Object> resultMap = result.getExtension(true, true);
         int modelConfidence = Integer.valueOf((String) resultMap.get("modelConfidence"));
         Assert.assertEquals("Custom Extension modelConfidence 0", 0, modelConfidence);
         InetAddress inetAddress = (InetAddress) resultMap.get("c6a3");
