@@ -28,7 +28,7 @@ jobs:
         run: mvn -Pcontrib-check --batch-mode --update-snapshots verify
 
       - name: Publish Release to Sonatype Maven Central
-        run: mvn -Pcontrib-check --batch-mode deploy
+        run: mvn -Prelease --batch-mode deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
