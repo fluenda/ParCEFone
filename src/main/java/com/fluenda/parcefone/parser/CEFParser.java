@@ -222,9 +222,11 @@ public class CEFParser {
             Set<ConstraintViolation<CommonEvent>> validationResult = validator.validate(cefEvent);
 
             if (validationResult.size() > 0) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("CEF message failed validation");
-            }
+                if (logger.isDebugEnabled()) {
+                    for(ConstraintViolation<CommonEvent> v : validationResult) {
+                        logger.debug("CEF message failed validation: " + v.getMessage());
+                    }
+                }
                 return null;
             } else {
                 return cefEvent;
