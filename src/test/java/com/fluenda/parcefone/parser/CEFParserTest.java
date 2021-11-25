@@ -18,6 +18,8 @@ package com.fluenda.parcefone.parser;
 
 import com.fluenda.parcefone.event.CommonEvent;
 import com.fluenda.parcefone.event.MacAddress;
+import com.fluenda.parcefone.parser.CEFParser;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -128,6 +130,24 @@ public class CEFParserTest {
         Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
         Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
         Assert.assertNull(parser.parse(sample1).getExtension(true).get("act"));
+    }
+
+    @Test
+    public void validMessageWithEmptyExtensions() throws Exception {
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt= cn3Label= cn3= cn2Label= cn2= shost= proto= cs5Label= cs5= dvchost= spt= dvc= smac= cn1Label= cn1= externalId= cs4Label= cs4= dmac= cs1Label= cs1=";
+        CEFParser parser = new CEFParser();
+
+        // validation should be disabled if we allow for null values
+        // if not disabled, the parsing would be successful but the validation is likely to fail
+        CommonEvent result = parser.parse(sample1, false, true, Locale.ENGLISH);
+
+        // Test sample
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
+        Assert.assertFalse(result.getExtension(true).containsKey("act"));
+        Assert.assertTrue(result.getExtension(true).containsKey("cn3") && result.getExtension(true).get("cn3") == null);
+        Assert.assertTrue(result.getExtension(true).containsKey("dvc") && result.getExtension(true).get("dvc") == null);
+        Assert.assertTrue(result.getExtension(true).containsKey("smac") && result.getExtension(true).get("smac") == null);
     }
 
     @Test

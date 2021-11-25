@@ -38,6 +38,13 @@ public abstract class CommonEvent {
     public abstract void setExtension(Map<String, String> extensions) throws CEFHandlingException;
 
     /**
+     * @param extensions A map containing the keys and values of extensions of CEF event
+     * @param allowNulls If true, extensions with an empty value will be seen as null. If false, parsing may fail depending on extension types
+     * @throws CEFHandlingException when it has issues populating the extensions
+     */
+    public abstract void setExtension(Map<String, String> extensions, final boolean allowNulls) throws CEFHandlingException;
+
+    /**
      * @return A map containing the keys and values of headers
      * @throws CEFHandlingException when it has issues reading the headers of CEF event
      */
