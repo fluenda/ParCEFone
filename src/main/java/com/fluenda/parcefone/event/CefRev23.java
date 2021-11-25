@@ -581,6 +581,12 @@ public class CefRev23 extends CommonEvent {
             try {
                 Field field = objClass.getDeclaredField(key);
                 String value = extensions.get(key);
+
+                // If the value is null/empty, let's just move on to the next one
+                if(value == null || value.isEmpty()) {
+                    continue;
+                }
+
                 // Treat each Classes in a particular fashion
 
                 // Inet, Inet4 and Inet6 address
@@ -649,10 +655,10 @@ public class CefRev23 extends CommonEvent {
 
                 // The rest (to be removed)
                 } else {
-                    field.set(this, value );
+                    field.set(this, value);
                 }
 
-                // Add the key to the populate keys listt
+                // Add the key to the populate keys list
                 populatedExtensions.add(key);
             } catch (NoSuchFieldException e) {
                 customExtensions.put(key, extensions.get(key));

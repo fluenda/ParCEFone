@@ -18,6 +18,8 @@ package com.fluenda.parcefone.parser;
 
 import com.fluenda.parcefone.event.CommonEvent;
 import com.fluenda.parcefone.event.MacAddress;
+import com.fluenda.parcefone.parser.CEFParser;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -128,6 +130,20 @@ public class CEFParserTest {
         Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
         Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
         Assert.assertNull(parser.parse(sample1).getExtension(true).get("act"));
+    }
+
+    @Test
+    public void validMessageWithEmptyExtensions() throws Exception {
+        String sample1 = "CEF:0|FireEye|CMS|7.2.1.244420|DM|domain-match|1|rt=Feb 09 2015 00:27:43 UTC cn3Label= cn3= cn2Label=sid cn2=80494706 shost=dev001srv02.example.com proto=udp cs5Label=cncHost cs5=mfdclk001.org dvchost=DEVFEYE1 spt=61395 dvc= smac= cn1Label=vlan cn1=0 externalId=851777 cs4Label=link cs4=https://DEVCMS01.example.com/event_stream/events_for_bot?ev_id\\=851777 dmac=00:1d:a2:af:32:a1 cs1Label=sname cs1=Trojan.Generic.DNS ";
+        CEFParser parser = new CEFParser();
+
+        // Test sample
+        Assert.assertNotNull(parser.parse(sample1));
+        Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
+        Assert.assertNull(parser.parse(sample1).getExtension(true).get("act"));
+        Assert.assertNull(parser.parse(sample1).getExtension(true).get("cn3"));
+        Assert.assertNull(parser.parse(sample1).getExtension(true).get("dvc"));
+        Assert.assertNull(parser.parse(sample1).getExtension(true).get("smac"));
     }
 
     @Test
