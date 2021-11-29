@@ -96,6 +96,19 @@ public class CEFParser {
         return this.parse(cefString, validate, locale);
     }
 
+    /**
+     * @return CommonEvent
+     * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
+     * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
+     * @param allowNulls If true, extensions with an empty value will be seen as null. If false, parsing may fail depending on extension types
+     * @param locale The locale to be used when parsing dates (so that parser can handle both jul (en_US) and juil.(fr_FR)
+     */
+    public CommonEvent parse(byte [] cefByteArray, boolean validate, final boolean allowNulls, Locale locale)  {
+        String cefString;
+        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        return this.parse(cefString, validate, allowNulls, locale);
+    }
+
 
     /**
      * <p>
@@ -131,6 +144,19 @@ public class CEFParser {
      * @return CommonEvent
      */
     public CommonEvent parse(String cefString, final boolean validate, Locale locale)  {
+        return this.parse(cefString, validate, false, locale);
+    }
+
+    /**
+     * Converts a CEF formatted String into a {@link CommonEvent} object with exposed control over validation and the
+     * {@link Locale} used to parse fields containing {@link Date Dates}
+     * @param cefString String containing the CEF message to be parsed
+     * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
+     * @param allowNulls If true, extensions with an empty value will be seen as null. If false, parsing may fail depending on extension types
+     * @param locale The locale to be used when parsing dates (so that parser can handle both jul (en_US) and juil.(fr_FR)
+     * @return CommonEvent
+     */
+    public CommonEvent parse(String cefString, final boolean validate, final boolean allowNulls, Locale locale)  {
 
         int cefHeaderSize = 7;
         CommonEvent cefEvent = new CefRev23(locale);
@@ -206,7 +232,7 @@ public class CEFParser {
 
         try {
             cefEvent.setHeader(headers);
-            cefEvent.setExtension(extensions);
+            cefEvent.setExtension(extensions, allowNulls);
 
         } catch (CEFHandlingException e) {
             logger.error(e.toString());
@@ -222,9 +248,11 @@ public class CEFParser {
             Set<ConstraintViolation<CommonEvent>> validationResult = validator.validate(cefEvent);
 
             if (validationResult.size() > 0) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("CEF message failed validation");
-            }
+                if (logger.isDebugEnabled()) {
+                    for(ConstraintViolation<CommonEvent> v : validationResult) {
+                        logger.debug("CEF message failed validation: " + v.getMessage());
+                    }
+                }
                 return null;
             } else {
                 return cefEvent;

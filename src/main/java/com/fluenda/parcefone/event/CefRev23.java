@@ -100,42 +100,42 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 1023)
     private String c6a4Label;
 
-    private float cfp1;
+    private Float cfp1;
 
     @Size(max = 1023)
     private String cfp1Label;
 
-    private float cfp2;
+    private Float cfp2;
 
     @Size(max = 1023)
     private String cfp2Label;
 
-    private float cfp3;
+    private Float cfp3;
 
     @Size(max = 1023)
     private String cfp3Label;
 
-    private float cfp4;
+    private Float cfp4;
 
     @Size(max = 1023)
     private String cfp4Label;
 
-    private long cn1;
+    private Long cn1;
 
     @Size(max = 1023)
     private String cn1Label;
 
-    private long cn2;
+    private Long cn2;
 
     @Size(max = 1023)
     private String cn2Label;
 
-    private long cn3;
+    private Long cn3;
 
     @Size(max = 1023)
     private String cn3Label;
 
-    private long cnt;
+    private Long cnt;
 
     @Size(max = 4000)
     private String cs1;
@@ -181,7 +181,7 @@ public class CefRev23 extends CommonEvent {
 
     private Inet4Address destinationTranslatedAddress;
 
-    private int destinationTranslatedPort;
+    private Integer destinationTranslatedPort;
 
     private Date deviceCustomDate1;
 
@@ -197,7 +197,7 @@ public class CefRev23 extends CommonEvent {
     // 0 = inbound 1 is outbound
     @Min(0)
     @Max(1)
-    private int deviceDirection;
+    private Integer deviceDirection;
 
     @Size(max = 255)
     private String deviceDnsDomain;
@@ -233,7 +233,7 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 255)
     private String dntdom;
 
-    private int dpid;
+    private Integer dpid;
 
     @Size(max = 1023)
     private String dpriv;
@@ -242,7 +242,7 @@ public class CefRev23 extends CommonEvent {
     private String dproc;
 
     @Max(65535)
-    private int dpt;
+    private Integer dpt;
 
     private Inet4Address dst;
 
@@ -262,7 +262,7 @@ public class CefRev23 extends CommonEvent {
 
     private MacAddress dvcmac;
 
-    private int dvcpid;
+    private Integer dvcpid;
 
     private Date end;
 
@@ -293,12 +293,12 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 128)
     private String flexDate1Label;
 
-    private long flexNumber1;
+    private Long flexNumber1;
 
     @Size(max = 128)
     private String flexNumber1Label;
 
-    private long flexNumber2;
+    private Long flexNumber2;
 
     @Size(max = 128)
     private String flexNumber2Label;
@@ -318,9 +318,9 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 1023)
     private String fname;
 
-    private int fsize;
+    private Integer fsize;
 
-    private int in;
+    private Integer in;
 
     @Size(max = 1023)
     private String msg;
@@ -344,12 +344,12 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 1023)
     private String oldFilePermission;
 
-    private int oldFileSize;
+    private Integer oldFileSize;
 
     @Size(max = 1023)
     private String oldFileType;
 
-    private int out;
+    private Integer out;
 
     @Size(max = 63)
     private String outcome;
@@ -394,9 +394,9 @@ public class CefRev23 extends CommonEvent {
 
     private Inet4Address sourceTranslatedAddress;
 
-    private int sourceTranslatedPort;
+    private Integer sourceTranslatedPort;
 
-    private int spid;
+    private Integer spid;
 
     @Size(max = 1023)
     private String spriv;
@@ -405,7 +405,7 @@ public class CefRev23 extends CommonEvent {
     private String sproc;
 
     @Max(65535)
-    private int spt;
+    private Integer spt;
 
     private Inet4Address src;
 
@@ -419,7 +419,7 @@ public class CefRev23 extends CommonEvent {
 
     @Min(0)
     @Max(3)
-    private int type;
+    private Integer type;
 
     @Size(max = 255)
     private String agentDnsDomain;
@@ -495,18 +495,18 @@ public class CefRev23 extends CommonEvent {
     @Size(max = 2048)
     private String deviceZoneURI;
 
-    private double dlat;
+    private Double dlat;
 
-    private double dlong;
+    private Double dlong;
 
-    private long eventId;
+    private Long eventId;
 
     @Size(max = 4000)
     private String rawEvent;
 
-    private double slat;
+    private Double slat;
 
-    private double slong;
+    private Double slong;
 
     @Size(max = 200)
     private String sourceTranslatedZoneExternalID;
@@ -571,88 +571,125 @@ public class CefRev23 extends CommonEvent {
         return headers;
     }
 
-
     /**
      * @param extensions A map containing the keys and values of extensions of CEF event
      * @throws CEFHandlingException when it has issues populating the extensions
      */
     public void setExtension(Map<String, String> extensions) throws CEFHandlingException {
+        setExtension(extensions, false);
+    }
+
+    /**
+     * @param extensions A map containing the keys and values of extensions of CEF event
+     * @param allowNulls If true, extensions with an empty value will be seen as null. If false, parsing may fail depending on extension types
+     * @throws CEFHandlingException when it has issues populating the extensions
+     */
+    public void setExtension(Map<String, String> extensions, final boolean allowNulls) throws CEFHandlingException {
         for (String key : extensions.keySet()) {
             try {
                 Field field = objClass.getDeclaredField(key);
                 String value = extensions.get(key);
+
                 // Treat each Classes in a particular fashion
 
                 // Inet, Inet4 and Inet6 address
                 if (field.getType().equals(InetAddress.class) || field.getType().equals(Inet4Address.class) || field.getType().equals(Inet6Address.class)) {
-                    try {
-                        InetAddress inetAddress = InetAddress.getByName((String) value);
-                        field.set(this, inetAddress);
-                    } catch (UnknownHostException e) {
-                        throw new CEFHandlingException("Error setting value to field " + key, e);
+                    if(allowNulls && (value == null || value.isEmpty())) {
+                        field.set(this, null);
+                    } else {
+                        try {
+                            InetAddress inetAddress = InetAddress.getByName((String) value);
+                            field.set(this, inetAddress);
+                        } catch (UnknownHostException e) {
+                            throw new CEFHandlingException("Error setting value to field " + key, e);
+                        }
                     }
 
                 // Date (timestamps) - Note we force a particular date format (set as private dateFormat above
                 } else if (field.getType().equals(Date.class)) {
-                    try {
-                        // Use a ": "to match epoch vs. Dateformat
-                        if (!value.toString().contains(":")) {
-                            // This is epoch
-                            field.set(this, new Date(Long.valueOf(value)));
-                        } else {
-                            // This is one of the remaining 8 possible values, regex it out...
-                            Matcher matcher = timeRegex.matcher(value);
+                    if(allowNulls && (value == null || value.isEmpty())) {
+                        field.set(this, null);
+                    } else {
+                        try {
+                            // Use a ": "to match epoch vs. Dateformat
+                            if (!value.toString().contains(":")) {
+                                // This is epoch
+                                field.set(this, new Date(Long.valueOf(value)));
+                            } else {
+                                // This is one of the remaining 8 possible values, regex it out...
+                                Matcher matcher = timeRegex.matcher(value);
 
-                            if (matcher.matches()) {
-                                String year = matcher.group("YEAR") == null ? String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : matcher.group("YEAR") ;
-                                String milli = matcher.group("MILLI") == null ? "000" : matcher.group("MILLI");
+                                if (matcher.matches()) {
+                                    String year = matcher.group("YEAR") == null ? String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : matcher.group("YEAR") ;
+                                    String milli = matcher.group("MILLI") == null ? "000" : matcher.group("MILLI");
 
-                                String regexDate =
-                                        year + "-" +
-                                        matcher.group("MONTH") + "-" +
-                                        matcher.group("DAY") + " " +
-                                        matcher.group("HOUR") + ":" +
-                                        matcher.group("MINUTE") + ":" +
-                                        matcher.group("SECOND") + "." +
-                                        milli;
-                                if (matcher.group("TZ") == null ) {
-                                    field.set(this, dateFormat(false).parse(regexDate));
-                                } else {
-                                    regexDate = regexDate + " " + matcher.group("TZ");
-                                    field.set(this, dateFormat(true).parse(regexDate));
+                                    String regexDate =
+                                            year + "-" +
+                                            matcher.group("MONTH") + "-" +
+                                            matcher.group("DAY") + " " +
+                                            matcher.group("HOUR") + ":" +
+                                            matcher.group("MINUTE") + ":" +
+                                            matcher.group("SECOND") + "." +
+                                            milli;
+                                    if (matcher.group("TZ") == null ) {
+                                        field.set(this, dateFormat(false).parse(regexDate));
+                                    } else {
+                                        regexDate = regexDate + " " + matcher.group("TZ");
+                                        field.set(this, dateFormat(true).parse(regexDate));
+                                    }
                                 }
                             }
+                        } catch (ParseException|NumberFormatException e) {
+                            throw new CEFHandlingException("Error setting value to field " + key, e);
                         }
-                    } catch (ParseException|NumberFormatException e) {
-                        throw new CEFHandlingException("Error setting value to field " + key, e);
                     }
 
                 // Mac Addresses
                 } else if (field.getType().equals(MacAddress.class)) {
-                    field.set(this, new MacAddress(value));
+                    if(allowNulls && (value == null || value.isEmpty())) {
+                        field.set(this, null);
+                    } else {
+                        field.set(this, new MacAddress(value));
+                    }
 
                 // Integers
-                } else if (field.getType().equals(int.class)) {
-                    field.set(this, Integer.valueOf(value));
+                } else if (field.getType().equals(Integer.class)) {
+                    if(allowNulls && (value == null || value.isEmpty())) {
+                        field.set(this, null);
+                    } else {
+                        field.set(this, Integer.valueOf(value));
+                    }
 
                 // Longs
-                } else if (field.getType().equals(long.class)){
-                    field.set(this, Long.valueOf(value));
+                } else if (field.getType().equals(Long.class)){
+                    if(allowNulls && (value == null || value.isEmpty())) {
+                        field.set(this, null);
+                    } else {
+                        field.set(this, Long.valueOf(value));
+                    }
 
                 // Doubles
-                } else if (field.getType().equals(double.class)) {
-                    field.set(this, Double.valueOf(value));
+                } else if (field.getType().equals(Double.class)) {
+                    if(allowNulls && (value == null || value.isEmpty())) {
+                        field.set(this, null);
+                    } else {
+                        field.set(this, Double.valueOf(value));
+                    }
 
                 // Floats
-                } else if (field.getType().equals(float.class)) {
-                    field.set(this, Float.valueOf(value));
+                } else if (field.getType().equals(Float.class)) {
+                    if(allowNulls && (value == null || value.isEmpty())) {
+                        field.set(this, null);
+                    } else {
+                        field.set(this, Float.valueOf(value));
+                    }
 
                 // The rest (to be removed)
                 } else {
-                    field.set(this, value );
+                    field.set(this, value);
                 }
 
-                // Add the key to the populate keys listt
+                // Add the key to the populate keys list
                 populatedExtensions.add(key);
             } catch (NoSuchFieldException e) {
                 customExtensions.put(key, extensions.get(key));
@@ -715,7 +752,5 @@ public class CefRev23 extends CommonEvent {
             return new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS", this.dateLocale);
         }
     }
-
-
 
 }
