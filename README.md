@@ -16,8 +16,9 @@
 
 -->
 
-# ParCEFone [![Build Status](https://travis-ci.org/fluenda/ParCEFone.svg?branch=master)](https://travis-ci.org/fluenda/ParCEFone)
-ParCEFone is a simple to use Common Event Format - CEF - log parser for the JVM.
+# ParCEFone
+
+ParCEFone is a simple-to-use Common Event Format - CEF - log parser for the JVM.
 
 It is written in JAVA and can be used by most JVM languages.
 
@@ -29,7 +30,7 @@ If using Maven, add the following dependency:
 <dependency>
     <groupId>com.fluenda</groupId>
     <artifactId>ParCEFone</artifactId>
-    <version>1.2.7</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
