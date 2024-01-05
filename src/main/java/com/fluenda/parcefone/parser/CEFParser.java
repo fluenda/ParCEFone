@@ -21,10 +21,10 @@ import com.fluenda.parcefone.event.CEFHandlingException;
 import com.fluenda.parcefone.event.CefRev23;
 import com.fluenda.parcefone.event.CommonEvent;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.nio.charset.Charset;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -64,27 +64,33 @@ public class CEFParser {
     }
 
     /**
+     * Parse byte array after converting to UTF-8 string with validation disabled
+     *
      * @return CommonEvent
      * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
      */
     public CommonEvent parse(byte [] cefByteArray)  {
         String cefString;
-        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        cefString = new String(cefByteArray, StandardCharsets.UTF_8);
         return this.parse(cefString, false);
     }
 
     /**
+     * Parse byte array after converting to UTF-8 string with validation enabled or disabled
+     *
      * @return CommonEvent
      * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
      * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
      */
     public CommonEvent parse(byte [] cefByteArray, boolean validate)  {
         String cefString;
-        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        cefString = new String(cefByteArray, StandardCharsets.UTF_8);
         return this.parse(cefString, validate);
     }
 
     /**
+     * Parse byte array after converting to UTF-8 string using specified Locale and with validation enabled or disabled
+     *
      * @return CommonEvent
      * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
      * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
@@ -92,11 +98,13 @@ public class CEFParser {
      */
     public CommonEvent parse(byte [] cefByteArray, boolean validate, Locale locale)  {
         String cefString;
-        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        cefString = new String(cefByteArray, StandardCharsets.UTF_8);
         return this.parse(cefString, validate, locale);
     }
 
     /**
+     * Parse byte array after converting to UTF-8 string using specified Locale and with validation and allow nulsl enabled or disabled
+     *
      * @return CommonEvent
      * @param cefByteArray byte [] containing the CEF message to be parsed - Array will be converted String using UTF-8
      * @param validate Boolean if parser should validate values beyond type compatibility (e.g. Values within acceptable lengths, value lists, etc)
@@ -105,7 +113,7 @@ public class CEFParser {
      */
     public CommonEvent parse(byte [] cefByteArray, boolean validate, final boolean allowNulls, Locale locale)  {
         String cefString;
-        cefString = new String(cefByteArray, Charset.forName("UTF-8"));
+        cefString = new String(cefByteArray, StandardCharsets.UTF_8);
         return this.parse(cefString, validate, allowNulls, locale);
     }
 
@@ -174,7 +182,7 @@ public class CEFParser {
             return null;
         }
 
-        final HashMap<String, Object> headers = new HashMap<String, Object>();
+        final HashMap<String, Object> headers = new HashMap<>();
         headers.put("version", Integer.valueOf(extractedMessage[0].substring(extractedMessage[0].length() - 1)));
         headers.put("deviceVendor", extractedMessage[1]);
         headers.put("deviceProduct", extractedMessage[2]);
@@ -183,7 +191,7 @@ public class CEFParser {
         headers.put("name", extractedMessage[5]);
         headers.put("severity", extractedMessage[6]);
 
-        final HashMap<String, String> extensions = new HashMap<String, String>();
+        final HashMap<String, String> extensions = new HashMap<>();
 
 
         final String ext = extractedMessage[7];
@@ -242,12 +250,12 @@ public class CEFParser {
         if (validate) {
             if (validator == null) {
                 // Since the validator wasn't initiated previously, create a new one;
-                this.validator = Validation.buildDefaultValidatorFactory().getValidator();;
+                this.validator = Validation.buildDefaultValidatorFactory().getValidator();
             }
 
             Set<ConstraintViolation<CommonEvent>> validationResult = validator.validate(cefEvent);
 
-            if (validationResult.size() > 0) {
+            if (!validationResult.isEmpty()) {
                 if (logger.isDebugEnabled()) {
                     for(ConstraintViolation<CommonEvent> v : validationResult) {
                         logger.debug("CEF message failed validation: " + v.getMessage());

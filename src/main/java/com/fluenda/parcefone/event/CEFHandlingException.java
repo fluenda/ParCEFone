@@ -16,13 +16,32 @@
  */
 package com.fluenda.parcefone.event;
 
+/**
+ * Common Event Format Handling Exception thrown on parsing failures
+ */
 public class CEFHandlingException extends Exception {
+    /**
+     * Default constructor with no arguments
+     */
     public CEFHandlingException() {
 
     }
+
+    /**
+     * Standard constructor with required message
+     *
+     * @param message Message describing failure
+     */
     public CEFHandlingException(String message) {
         super(message);
     }
+
+    /**
+     * Standard constructor with required message and cause
+     *
+     * @param message Message describing failure
+     * @param cause Throwable cause of parsing failure
+     */
     public CEFHandlingException(String message, Throwable cause) {
         super(message,cause);
     }
