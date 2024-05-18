@@ -264,6 +264,7 @@
                         </executions>
                         <configuration>
                             <excludes>
+                                <exclude>.github/*.yml</exclude>
                                 <exclude>.github/workflows/*.yml</exclude>
                                 <exclude>settings.xml</exclude>
                                 <exclude>src/test/resources/log4j.properties</exclude>
