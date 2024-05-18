@@ -16,10 +16,10 @@
  */
 package com.fluenda.parcefone.event;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.lang.reflect.Field;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -522,12 +522,19 @@ public class CefRev23 extends CommonEvent {
 
     private Locale dateLocale;
 
-
+    /**
+     * Standard constructor with locale for date objects
+     *
+     * @param locale Locale for date objects
+     */
     public CefRev23(Locale locale) {
         super();
         this.dateLocale = locale;
     }
 
+    /**
+     * Default constructor with date locale set to English
+     */
     public CefRev23() {
         super();
 

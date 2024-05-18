@@ -18,19 +18,23 @@ package com.fluenda.parcefone.parser;
 
 import com.fluenda.parcefone.event.CommonEvent;
 import com.fluenda.parcefone.event.MacAddress;
-import com.fluenda.parcefone.parser.CEFParser;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CEFParserTest {
 
@@ -44,9 +48,9 @@ public class CEFParserTest {
         result = parser.parse(arcsightSample1, true);
         Map<String, Object> resultMap = result.getExtension(true, true);
         int modelConfidence = Integer.valueOf((String) resultMap.get("modelConfidence"));
-        Assert.assertEquals("Custom Extension modelConfidence 0", 0, modelConfidence);
+        assertEquals(0, modelConfidence, "Custom Extension modelConfidence 0");
         InetAddress inetAddress = (InetAddress) resultMap.get("c6a3");
-        Assert.assertEquals("Mapped IPV4 in IPV6 field: 10.142.108.195", "/10.142.108.195", inetAddress.toString());
+        assertEquals("/10.142.108.195", inetAddress.toString(), "Mapped IPV4 in IPV6 field: 10.142.108.195");
     }
 
     @Test
@@ -85,39 +89,39 @@ public class CEFParserTest {
 
         // Test sample1
         result = parser.parse(sample1, true);
-        Assert.assertNotNull(result);
-        Assert.assertEquals("TestVendor" , result.getHeader().get("deviceVendor"));
-        Assert.assertEquals(new Date(1423441663000L), result.getExtension(true).get("rt"));
-        Assert.assertEquals("Test Long", result.getExtension(true).get("cn3Label"));
-        Assert.assertEquals(9223372036854775807L, result.getExtension(true).get("cn3"));
-        Assert.assertEquals(1.234F, result.getExtension(true).get("cfp1"));
-        Assert.assertEquals("Test FP Number", result.getExtension(true).get("cfp1Label"));
-        Assert.assertEquals(new MacAddress("00.00.0c.07.ac.00"), result.getExtension(true).get("smac"));
-        Assert.assertEquals(InetAddress.getByName("2001:cdba:0000:0000:0000:0000:3257:9652"), result.getExtension(true).get("c6a3"));
-        Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
-        Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
-        Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
-        Assert.assertEquals(InetAddress.getByName("123.123.0.124"), result.getExtension(true).get("agt"));
-        Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));
+        assertNotNull(result);
+        assertEquals("TestVendor" , result.getHeader().get("deviceVendor"));
+        assertEquals(new Date(1423441663000L), result.getExtension(true).get("rt"));
+        assertEquals("Test Long", result.getExtension(true).get("cn3Label"));
+        assertEquals(9223372036854775807L, result.getExtension(true).get("cn3"));
+        assertEquals(1.234F, result.getExtension(true).get("cfp1"));
+        assertEquals("Test FP Number", result.getExtension(true).get("cfp1Label"));
+        assertEquals(new MacAddress("00.00.0c.07.ac.00"), result.getExtension(true).get("smac"));
+        assertEquals(InetAddress.getByName("2001:cdba:0000:0000:0000:0000:3257:9652"), result.getExtension(true).get("c6a3"));
+        assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
+        assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
+        assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
+        assertEquals(1234, result.getExtension(true).get("dpt"));
+        assertEquals(InetAddress.getByName("123.123.0.124"), result.getExtension(true).get("agt"));
+        assertEquals(40.366633D, result.getExtension(true).get("dlat"));
 
         // Test sample2
         result = parser.parse(sample2, true);
-        Assert.assertNotNull(result);
-        Assert.assertEquals("TestVendor" , result.getHeader().get("deviceVendor"));
-        Assert.assertEquals(new Date(1423441663000L), result.getExtension(true).get("rt"));
-        Assert.assertEquals("Test Long", result.getExtension(true).get("cn3Label"));
-        Assert.assertEquals(9223372036854775807L, result.getExtension(true).get("cn3"));
-        Assert.assertEquals(1.234F, result.getExtension(true).get("cfp1"));
-        Assert.assertEquals("Test FP Number", result.getExtension(true).get("cfp1Label"));
-        Assert.assertEquals(new MacAddress("00.00.0c.07.ac.00"), result.getExtension(true).get("smac"));
-        Assert.assertEquals(InetAddress.getByName("2001:cdba:0:0:0:0:3257:9652"), result.getExtension(true).get("c6a3"));
-        Assert.assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
-        Assert.assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
-        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
-        Assert.assertEquals(1234, result.getExtension(true).get("dpt"));
-        Assert.assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtension(true).get("agt"));
-        Assert.assertEquals(40.366633D, result.getExtension(true).get("dlat"));
+        assertNotNull(result);
+        assertEquals("TestVendor" , result.getHeader().get("deviceVendor"));
+        assertEquals(new Date(1423441663000L), result.getExtension(true).get("rt"));
+        assertEquals("Test Long", result.getExtension(true).get("cn3Label"));
+        assertEquals(9223372036854775807L, result.getExtension(true).get("cn3"));
+        assertEquals(1.234F, result.getExtension(true).get("cfp1"));
+        assertEquals("Test FP Number", result.getExtension(true).get("cfp1Label"));
+        assertEquals(new MacAddress("00.00.0c.07.ac.00"), result.getExtension(true).get("smac"));
+        assertEquals(InetAddress.getByName("2001:cdba:0:0:0:0:3257:9652"), result.getExtension(true).get("c6a3"));
+        assertEquals("Test IPv6", result.getExtension(true).get("c6a3Label"));
+        assertEquals(InetAddress.getByName("123.123.123.123"), result.getExtension(true).get("destinationTranslatedAddress"));
+        assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Feb 09 2015 00:27:43"), result.getExtension(true).get("deviceCustomDate1"));
+        assertEquals(1234, result.getExtension(true).get("dpt"));
+        assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtension(true).get("agt"));
+        assertEquals(40.366633D, result.getExtension(true).get("dlat"));
     }
 
     @Test
@@ -126,10 +130,10 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         // Test sample
-        Assert.assertNotNull(parser.parse(sample1));
-        Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
-        Assert.assertNull(parser.parse(sample1).getExtension(true).get("act"));
+        assertNotNull(parser.parse(sample1));
+        assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
+        assertNull(parser.parse(sample1).getExtension(true).get("act"));
     }
 
     @Test
@@ -142,12 +146,12 @@ public class CEFParserTest {
         CommonEvent result = parser.parse(sample1, false, true, Locale.ENGLISH);
 
         // Test sample
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
-        Assert.assertFalse(result.getExtension(true).containsKey("act"));
-        Assert.assertTrue(result.getExtension(true).containsKey("cn3") && result.getExtension(true).get("cn3") == null);
-        Assert.assertTrue(result.getExtension(true).containsKey("dvc") && result.getExtension(true).get("dvc") == null);
-        Assert.assertTrue(result.getExtension(true).containsKey("smac") && result.getExtension(true).get("smac") == null);
+        assertNotNull(result);
+        assertTrue(result.getHeader().containsKey("deviceVendor"));
+        assertFalse(result.getExtension(true).containsKey("act"));
+        assertTrue(result.getExtension(true).containsKey("cn3") && result.getExtension(true).get("cn3") == null);
+        assertTrue(result.getExtension(true).containsKey("dvc") && result.getExtension(true).get("dvc") == null);
+        assertTrue(result.getExtension(true).containsKey("smac") && result.getExtension(true).get("smac") == null);
     }
 
     @Test
@@ -158,10 +162,10 @@ public class CEFParserTest {
         byte[] sample1Array = sample1.getBytes(Charset.forName("UTF-8"));
 
         // Test sample
-        Assert.assertNotNull(parser.parse(sample1Array));
-        Assert.assertTrue(parser.parse(sample1Array).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array).getExtension(true).get("dvc"));
-        Assert.assertNull(parser.parse(sample1Array).getExtension(true).get("act"));
+        assertNotNull(parser.parse(sample1Array));
+        assertTrue(parser.parse(sample1Array).getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array).getExtension(true).get("dvc"));
+        assertNull(parser.parse(sample1Array).getExtension(true).get("act"));
     }
 
     @Test
@@ -172,10 +176,10 @@ public class CEFParserTest {
         byte[] sample1Array = sample1.getBytes(Charset.forName("UTF-8"));
 
         // Test sample
-        Assert.assertNotNull(parser.parse(sample1Array, true));
-        Assert.assertTrue(parser.parse(sample1Array, true).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array, true).getExtension(true).get("dvc"));
-        Assert.assertNull(parser.parse(sample1Array, true).getExtension(true).get("act"));
+        assertNotNull(parser.parse(sample1Array, true));
+        assertTrue(parser.parse(sample1Array, true).getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array, true).getExtension(true).get("dvc"));
+        assertNull(parser.parse(sample1Array, true).getExtension(true).get("act"));
     }
 
     @Test
@@ -186,11 +190,11 @@ public class CEFParserTest {
         byte[] sample1Array = sample1.getBytes(Charset.forName("UTF-8"));
 
         // Test sample
-        Assert.assertNotNull(parser.parse(sample1Array, true, Locale.FRANCE));
-        Assert.assertTrue(parser.parse(sample1Array, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(new Date(1436401663000L), parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("rt"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("dvc"));
-        Assert.assertNull(parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("act"));
+        assertNotNull(parser.parse(sample1Array, true, Locale.FRANCE));
+        assertTrue(parser.parse(sample1Array, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
+        assertEquals(new Date(1436401663000L), parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("rt"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("dvc"));
+        assertNull(parser.parse(sample1Array, true, Locale.FRANCE).getExtension(true).get("act"));
     }
 
     @Test
@@ -199,11 +203,11 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         // Test sample
-        Assert.assertNotNull(parser.parse(sample1, true, Locale.FRANCE));
-        Assert.assertTrue(parser.parse(sample1, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(new Date(1436401663000L), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("rt"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("dvc"));
-        Assert.assertNull(parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("act"));
+        assertNotNull(parser.parse(sample1, true, Locale.FRANCE));
+        assertTrue(parser.parse(sample1, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
+        assertEquals(new Date(1436401663000L), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("rt"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("dvc"));
+        assertNull(parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("act"));
     }
 
     @Test
@@ -212,11 +216,11 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         // Test sample
-        Assert.assertNotNull(parser.parse(sample1, true, Locale.FRANCE));
-        Assert.assertTrue(parser.parse(sample1, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Jul 09 2015 00:27:43"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("rt"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("dvc"));
-        Assert.assertNull(parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("act"));
+        assertNotNull(parser.parse(sample1, true, Locale.FRANCE));
+        assertTrue(parser.parse(sample1, true, Locale.FRANCE).getHeader().containsKey("deviceVendor"));
+        assertEquals(new SimpleDateFormat("MMM dd yyyy HH:mm:ss").parse("Jul 09 2015 00:27:43"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("rt"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("dvc"));
+        assertNull(parser.parse(sample1, true, Locale.FRANCE).getExtension(true).get("act"));
     }
 
     @Test
@@ -233,47 +237,47 @@ public class CEFParserTest {
 
         // Test 1st sample
         CommonEvent result = parser.parse(sample1, true);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), result.getExtension(true).get("dvc"));
-        Assert.assertEquals(new Date(1423441663000L), result.getExtension(true).get("rt"));
-        Assert.assertEquals(Long.valueOf("80494706"), result.getExtension(true).get("cn2"));
-        Assert.assertEquals(Integer.valueOf("61395"), result.getExtension(true).get("spt"));
-        Assert.assertEquals("udp", result.getExtension(true).get("proto"));
-        Assert.assertFalse(result.getExtension(true).containsKey("act"));
+        assertNotNull(result);
+        assertTrue(result.getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), result.getExtension(true).get("dvc"));
+        assertEquals(new Date(1423441663000L), result.getExtension(true).get("rt"));
+        assertEquals(Long.valueOf("80494706"), result.getExtension(true).get("cn2"));
+        assertEquals(Integer.valueOf("61395"), result.getExtension(true).get("spt"));
+        assertEquals("udp", result.getExtension(true).get("proto"));
+        assertFalse(result.getExtension(true).containsKey("act"));
 
         // Test 2nd sample
         result = parser.parse(sample2, true);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
-        Assert.assertFalse(result.getExtension(true).containsKey("dvc"));
+        assertNotNull(result);
+        assertTrue(result.getHeader().containsKey("deviceVendor"));
+        assertFalse(result.getExtension(true).containsKey("dvc"));
 
         // Test 3rd sample
         result = parser.parse(sample3, true);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("1.1.1.1"),result.getExtension(true).get("dst"));
-        Assert.assertEquals(InetAddress.getByName("10.0.0.1"),result.getExtension(true).get("src"));
-        Assert.assertEquals("blocked a |",result.getExtension(true).get("act"));
+        assertNotNull(result);
+        assertTrue(result.getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("1.1.1.1"),result.getExtension(true).get("dst"));
+        assertEquals(InetAddress.getByName("10.0.0.1"),result.getExtension(true).get("src"));
+        assertEquals("blocked a |",result.getExtension(true).get("act"));
 
         // Test 4th sample
         result = parser.parse(sample4, true);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("1.1.1.1"), result.getExtension(true).get("dst"));
-        Assert.assertEquals(InetAddress.getByName("10.0.0.1"), result.getExtension(true).get("src"));
-        Assert.assertEquals("blocked a \\\\", result.getExtension(true).get("act"));
+        assertNotNull(result);
+        assertTrue(result.getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("1.1.1.1"), result.getExtension(true).get("dst"));
+        assertEquals(InetAddress.getByName("10.0.0.1"), result.getExtension(true).get("src"));
+        assertEquals("blocked a \\\\", result.getExtension(true).get("act"));
 
         // Test 5th sample
         result = parser.parse(sample5, true);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.getHeader().containsKey("deviceVendor"));
+        assertNotNull(result);
+        assertTrue(result.getHeader().containsKey("deviceVendor"));
         // Test leading space on first KV pair
-        Assert.assertEquals(1032L, result.getExtension(true).get("eventId"));
-        Assert.assertEquals(InetAddress.getByName("10.128.10.42"), result.getExtension(true).get("dst"));
-        Assert.assertEquals(InetAddress.getByName("72.238.189.126"), result.getExtension(true).get("src"));
-        Assert.assertEquals("/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255", result.getExtension(true).get("deviceZoneURI"));
-        Assert.assertEquals(new Date(1396032820000L), result.getExtension(true).get("rt"));
+        assertEquals(1032L, result.getExtension(true).get("eventId"));
+        assertEquals(InetAddress.getByName("10.128.10.42"), result.getExtension(true).get("dst"));
+        assertEquals(InetAddress.getByName("72.238.189.126"), result.getExtension(true).get("src"));
+        assertEquals("/All Zones/ArcSight System/Private Address Space Zones/RFC1918: 10.0.0.0-10.255.255.255", result.getExtension(true).get("deviceZoneURI"));
+        assertEquals(new Date(1396032820000L), result.getExtension(true).get("rt"));
    }
 
 
@@ -283,11 +287,11 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         // Test 1st sample
-        Assert.assertNotNull(parser.parse(sample1, true));
-        Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
-        Assert.assertTrue(parser.parse(sample1).getExtension(false).containsKey("act"));
-        Assert.assertNull(parser.parse(sample1).getExtension(false).get("act"));
+        assertNotNull(parser.parse(sample1, true));
+        assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
+        assertTrue(parser.parse(sample1).getExtension(false).containsKey("act"));
+        assertNull(parser.parse(sample1).getExtension(false).get("act"));
     }
 
     @Test
@@ -297,11 +301,11 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         CommonEvent event = parser.parse(sample1, true);
-        Assert.assertNull(event);
+        assertNull(event);
 
         String sample2 = "CEF:0|security|threatmanager|1.0|100|detected a \\\\ in packet|10|src=10.0.0.1 proto=xdp dst=1.1.1.1";
         event = parser.parse(sample2, true);
-        Assert.assertNull(event);
+        assertNull(event);
     }
 
     @Test
@@ -311,7 +315,7 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         CommonEvent event = parser.parse(sample1, true);
-        Assert.assertNull(event);
+        assertNull(event);
 
     }
 
@@ -322,9 +326,9 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         CommonEvent event = parser.parse(sample1, true);
-        Assert.assertNotNull(event);
-        Assert.assertTrue(event.getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals("", event.getHeader().get("deviceVendor"));
+        assertNotNull(event);
+        assertTrue(event.getHeader().containsKey("deviceVendor"));
+        assertEquals("", event.getHeader().get("deviceVendor"));
     }
 
     @Test
@@ -334,7 +338,7 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser();
 
         CommonEvent event = parser.parse(sample1, true);
-        Assert.assertNull(event);
+        assertNull(event);
     }
 
     @Test
@@ -347,10 +351,10 @@ public class CEFParserTest {
         CEFParser parser = new CEFParser(validator);
 
         // Test 1st sample
-        Assert.assertNotNull(parser.parse(sample1, true));
-        Assert.assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
-        Assert.assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
-        Assert.assertTrue(parser.parse(sample1).getExtension(false).containsKey("act"));
-        Assert.assertNull(parser.parse(sample1).getExtension(false).get("act"));
+        assertNotNull(parser.parse(sample1, true));
+        assertTrue(parser.parse(sample1).getHeader().containsKey("deviceVendor"));
+        assertEquals(InetAddress.getByName("10.100.25.16"), parser.parse(sample1).getExtension(true).get("dvc"));
+        assertTrue(parser.parse(sample1).getExtension(false).containsKey("act"));
+        assertNull(parser.parse(sample1).getExtension(false).get("act"));
     }
 }
