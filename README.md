@@ -1,6 +1,6 @@
 <!--
 
- (C) Copyright 2016-2017 Fluenda.
+ (C) Copyright 2016-2024 Fluenda.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ If using Maven, add the following dependency:
 <dependency>
     <groupId>com.fluenda</groupId>
     <artifactId>ParCEFone</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
