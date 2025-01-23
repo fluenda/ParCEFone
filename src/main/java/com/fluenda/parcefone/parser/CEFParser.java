@@ -18,7 +18,7 @@
 package com.fluenda.parcefone.parser;
 
 import com.fluenda.parcefone.event.CEFHandlingException;
-import com.fluenda.parcefone.event.CefRev23;
+import com.fluenda.parcefone.event.CefRev27;
 import com.fluenda.parcefone.event.CommonEvent;
 
 import jakarta.validation.ConstraintViolation;
@@ -167,7 +167,7 @@ public class CEFParser {
     public CommonEvent parse(String cefString, final boolean validate, final boolean allowNulls, Locale locale)  {
 
         int cefHeaderSize = 7;
-        CommonEvent cefEvent = new CefRev23(locale);
+        CommonEvent cefEvent = new CefRev27(locale);
 
         // Note how split number of splits is cefHeaderSize + 1. This is because the final split
         // should be the body of the CEF message
@@ -192,8 +192,6 @@ public class CEFParser {
         headers.put("severity", extractedMessage[6]);
 
         final HashMap<String, String> extensions = new HashMap<>();
-
-
         final String ext = extractedMessage[7];
 
         // Compiled pattern is equivalent to String extensionRegex = "(?<!\\\\)" + Pattern.quote("=");

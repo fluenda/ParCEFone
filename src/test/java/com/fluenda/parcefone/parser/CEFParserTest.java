@@ -66,7 +66,7 @@ public class CEFParserTest {
                 "destinationTranslatedAddress=123.123.123.123 " +
                 // Date (without TZ)
                 "deviceCustomDate1=Feb 09 2015 00:27:43 " +
-                // Integer  and IP Address (from v4)
+                // Integer and IP Address (from v4)
                 "dpt=1234 agt=123.123.0.124 dlat=40.366633";
 
         String sample2 = "CEF:0|TestVendor|TestProduct|TestVersion|TestEventClassID|TestName|Low|" +
@@ -78,10 +78,12 @@ public class CEFParserTest {
                 "c6a3=2001:cdba:0000:0000:0000:0000:3257:9652 c6a3Label=Test IPv6 " +
                 // IPv4
                 "destinationTranslatedAddress=123.123.123.123 " +
-                // Date ((without TZ)
+                // Date (without TZ)
                 "deviceCustomDate1=Feb 09 2015 00:27:43 " +
-                // Integer  and IP Address (from v6)
-                "dpt=1234 agt=2001:cdba:0:0:0:0:3257:9652 dlat=40.366633";
+                // Integer and IP Address (from v6)
+                "dpt=1234 agt=2001:cdba:0:0:0:0:3257:9652 dlat=40.366633 " +
+                // File size (as long, larger than max int)
+                "fsize=2147483648 oldFileSize=1024";
 
         CEFParser parser = new CEFParser();
 
@@ -122,6 +124,8 @@ public class CEFParserTest {
         assertEquals(1234, result.getExtension(true).get("dpt"));
         assertEquals(InetAddress.getByName("2001:cdba::3257:9652"), result.getExtension(true).get("agt"));
         assertEquals(40.366633D, result.getExtension(true).get("dlat"));
+        assertEquals(2147483648L, result.getExtension(true).get("fsize"));
+        assertEquals(1024L, result.getExtension(true).get("oldFileSize"));
     }
 
     @Test

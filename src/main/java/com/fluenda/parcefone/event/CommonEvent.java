@@ -64,6 +64,14 @@ public abstract class CommonEvent {
     public abstract Map<String, Object> getHeader() throws CEFHandlingException;
 
     /**
+     * Get the native type of the specified CEF extension field
+     *
+     * @param extensionName Name of the CEF extension field
+     * @throws NoSuchFieldException if the field name is not recognised
+     */
+    public abstract Class<?> getExtensionFieldType(String extensionName) throws NoSuchFieldException;
+
+    /**
      * Get map of named extensions
      *
      * @param populatedOnly Boolean defining if Map should include all fields supported by the <b>supported</b> CEF standard
@@ -76,7 +84,7 @@ public abstract class CommonEvent {
     /**
      * Get map of named extensions after applying specified filtering
      *
-     * @param populatedOnly Boolean defining if Map should include all fields supported by {@link com.fluenda.parcefone.event.CefRev23}
+     * @param populatedOnly Boolean defining if Map should include all fields supported by {@link CefRev27}
      * @param includeCustomExtensions Boolean defining if Map should include parsed keys that are not supported part of the base CEF Rev23 specification
      * @return A map containing the keys and values of CEF extensions
      * @throws CEFHandlingException when it hits issues (e.g. IllegalAccessException) reading the extensions
