@@ -154,9 +154,6 @@
                     <nohelp>true</nohelp>
                     <header>${project.name}, ${project.version}</header>
                     <doctitle>${project.name}, ${project.version}</doctitle>
-                    <links>
-                        <link>http://static.springsource.org/spring/docs/3.0.x/javadoc-api/</link>
-                    </links>
                 </configuration>
                 <executions>
                     <execution>
