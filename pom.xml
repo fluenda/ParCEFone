@@ -185,9 +185,9 @@
                     <fork>true</fork>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <source>11</source>
-                    <target>11</target>
-                    <release>11</release>
+                    <source>17</source>
+                    <target>17</target>
+                    <release>17</release>
                 </configuration>
             </plugin>
             <plugin>
